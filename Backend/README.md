@@ -1,4 +1,4 @@
-# Gama - Backend Service
+# Backend Template built on
 
 1. MongoDB
 2. Express JS
