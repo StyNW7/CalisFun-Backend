@@ -34,7 +34,7 @@ const startServer = async () => {
   try {
     await connectDB();
     
-    server.listen(port, () => {
+    app.listen(port, () => {
       console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode`);
       console.log(`Server running on port ${port}`);
       if (process.env.NODE_ENV === "development") {
