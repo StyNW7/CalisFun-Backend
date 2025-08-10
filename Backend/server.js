@@ -45,13 +45,19 @@ const connectAndStart = async () => {
 
 // Vercel serverless handler
 const vercelHandler = async (req, res) => {
-  await connectDB(); // Ensure DB connection for each request
-  return app(req, res);
+  try {
+    await connectDB();
+    return app(req, res);
+  } catch (err) {
+    console.error("Request handling failed:", err);
+    res.status(500).send("Internal Server Error");
+  }
 };
 
-// Conditional exports
-if (process.env.NODE_ENV === "production") {
-  vercelHandler(); // For Vercel
-} else {
-  connectAndStart(); // For local development
+// Start locally if not in production
+if (process.env.NODE_ENV !== "production") {
+  connectAndStart();
 }
+
+// Always export the handler (Vercel will use this in production)
+export default vercelHandler;
