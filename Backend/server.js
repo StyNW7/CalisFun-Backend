@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === "development") {
 app.use(cors(corsOptions));
 
 // Routes
-app.get("/", (req, res) => res.send("Express on Azure App Services"));
+app.get("/", (req, res) => res.send("Express on Vercel"));
 app.use("/api", router);
 
 // Database connection and server start
@@ -47,4 +47,8 @@ const startServer = async () => {
   }
 };
 
-startServer();
+if (process.env.NODE_ENV === 'production') {
+  module.exports = app;  // For Vercel
+} else {
+  startServer();  // For local development
+}
