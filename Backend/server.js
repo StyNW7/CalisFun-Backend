@@ -15,13 +15,10 @@ app.use(express.json());
 // CORS configuration
 const corsOptions = {
   credentials: true,
+  origin: process.env.NODE_ENV === "development" 
+    ? "http://localhost:5173" 
+    : process.env.FRONTEND_URL
 };
-
-if (process.env.NODE_ENV === "development") {
-  corsOptions.origin = "http://localhost:5173";
-} else if (process.env.NODE_ENV === "production") {
-  corsOptions.origin = process.env.FRONTEND_URL;
-}
 
 app.use(cors(corsOptions));
 
@@ -29,26 +26,32 @@ app.use(cors(corsOptions));
 app.get("/", (req, res) => res.send("Express on Vercel"));
 app.use("/api", router);
 
-// Database connection and server start
-const startServer = async () => {
+// Database connection
+const connectAndStart = async () => {
   try {
     await connectDB();
+    console.log("MongoDB connected");
     
-    app.listen(port, () => {
-      console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode`);
-      console.log(`Server running on port ${port}`);
-      if (process.env.NODE_ENV === "development") {
-        console.log(`Access the server at http://localhost:${port}`);
-      }
-    });
+    if (process.env.NODE_ENV !== "production") {
+      app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
+      });
+    }
   } catch (err) {
-    console.error("Failed to connect to DB", err);
+    console.error("DB connection failed:", err);
     process.exit(1);
   }
 };
 
-if (process.env.NODE_ENV === 'production') {
-  module.exports = app;  // For Vercel
+// Vercel serverless handler
+const vercelHandler = async (req, res) => {
+  await connectDB(); // Ensure DB connection for each request
+  return app(req, res);
+};
+
+// Conditional exports
+if (process.env.NODE_ENV === "production") {
+  vercelHandler(); // For Vercel
 } else {
-  startServer();  // For local development
+  connectAndStart(); // For local development
 }
