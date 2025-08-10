@@ -15,13 +15,10 @@ app.use(express.json());
 // CORS configuration
 const corsOptions = {
   credentials: true,
+  origin: [
+    "http://localhost:5173", process.env.FRONTEND_URL
+  ]
 };
-
-if (process.env.NODE_ENV === "development") {
-  corsOptions.origin = "http://localhost:5173";
-} else if (process.env.NODE_ENV === "production") {
-  corsOptions.origin = "http://localhost:5173";
-}
 
 app.use(cors(corsOptions));
 
@@ -29,22 +26,26 @@ app.use(cors(corsOptions));
 app.get("/", (req, res) => res.send("Express on Vercel"));
 app.use("/api", router);
 
-// Database connection and server start
+// Database connection
 const startServer = async () => {
   try {
     await connectDB();
-    
-    app.listen(port, () => {
-      console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode`);
-      console.log(`Server running on port ${port}`);
-      if (process.env.NODE_ENV === "development") {
-        console.log(`Access the server at http://localhost:${port}`);
-      }
-    });
+    console.log("MongoDB connected");
   } catch (err) {
-    console.error("Failed to connect to DB", err);
+    console.error("DB connection failed:", err);
     process.exit(1);
   }
 };
 
-startServer();
+// Start server in dev mode
+if (process.env.NODE_ENV !== "production") {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
+
+// Export for Vercel serverless
+export default async (req, res) => {
+  await startServer();
+  return app(req, res);
+};
