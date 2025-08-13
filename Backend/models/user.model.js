@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: "user",
   },
+  countingDifficulty: {
+    type: String,
+    required: true,
+    default: "easy",
+  },
 });
 
 userSchema.pre("save", async function (next) {
