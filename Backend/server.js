@@ -20,31 +20,40 @@ const corsOptions = {
 if (process.env.NODE_ENV === "development") {
   corsOptions.origin = "http://localhost:5173";
 } else if (process.env.NODE_ENV === "production") {
-  corsOptions.origin = "http://beta-indonesia.vercel.app";
+  corsOptions.origin = "https://beta-indonesia.vercel.app"; // Changed to https
 }
 
 app.use(cors(corsOptions));
 
 // Routes
-app.get("/", (req, res) => res.send("Express on Azure App Services"));
+app.get("/", (req, res) => res.send("Express on Vercel"));
 app.use("/api", router);
 
-// Database connection and server start
-const startServer = async () => {
+// For Vercel deployment
+export default async (req, res) => {
   try {
     await connectDB();
-    
-    app.listen(port, () => {
-      console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode`);
-      console.log(`Server running on port ${port}`);
-      if (process.env.NODE_ENV === "development") {
-        console.log(`Access the server at http://localhost:${port}`);
-      }
-    });
+    return app(req, res);
   } catch (err) {
     console.error("Failed to connect to DB", err);
-    process.exit(1);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-startServer();
+// For local development
+if (process.env.NODE_ENV === "development") {
+  const startServer = async () => {
+    try {
+      await connectDB();
+      app.listen(port, () => {
+        console.log(`Server running in development mode`);
+        console.log(`Server running on port ${port}`);
+        console.log(`Access the server at http://localhost:${port}`);
+      });
+    } catch (err) {
+      console.error("Failed to connect to DB", err);
+      process.exit(1);
+    }
+  };
+  startServer();
+}
