@@ -13,15 +13,24 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // CORS configuration
+// const corsOptions = {
+//   credentials: true,
+// };
+
+// if (process.env.NODE_ENV === "development") {
+//   corsOptions.origin = "http://localhost:5173";
+// } else if (process.env.NODE_ENV === "production") {
+//   corsOptions.origin = "https://beta-indonesia.vercel.app"; // Changed to https
+// }
+
 const corsOptions = {
+  origin: (origin, callback) => {
+    // Jika origin tidak ada (contoh: Postman, curl), izinkan
+    if (!origin) return callback(null, true);
+    return callback(null, true); // Semua origin diizinkan
+  },
   credentials: true,
 };
-
-if (process.env.NODE_ENV === "development") {
-  corsOptions.origin = "http://localhost:5173";
-} else if (process.env.NODE_ENV === "production") {
-  corsOptions.origin = "https://beta-indonesia.vercel.app"; // Changed to https
-}
 
 app.use(cors(corsOptions));
 
