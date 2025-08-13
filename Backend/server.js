@@ -15,49 +15,36 @@ app.use(express.json());
 // CORS configuration
 const corsOptions = {
   credentials: true,
-  origin: process.env.NODE_ENV === "development" 
-    ? "http://localhost:5173" 
-    : process.env.FRONTEND_URL
 };
+
+if (process.env.NODE_ENV === "development") {
+  corsOptions.origin = "http://localhost:5173";
+} else if (process.env.NODE_ENV === "production") {
+  corsOptions.origin = "http://beta-indonesia.vercel.app";
+}
 
 app.use(cors(corsOptions));
 
 // Routes
-app.get("/", (req, res) => res.send("Express on Vercel"));
+app.get("/", (req, res) => res.send("Express on Azure App Services"));
 app.use("/api", router);
 
-// Database connection
-const connectAndStart = async () => {
+// Database connection and server start
+const startServer = async () => {
   try {
     await connectDB();
-    console.log("MongoDB connected");
     
-    if (process.env.NODE_ENV !== "production") {
-      app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-      });
-    }
+    app.listen(port, () => {
+      console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode`);
+      console.log(`Server running on port ${port}`);
+      if (process.env.NODE_ENV === "development") {
+        console.log(`Access the server at http://localhost:${port}`);
+      }
+    });
   } catch (err) {
-    console.error("DB connection failed:", err);
+    console.error("Failed to connect to DB", err);
     process.exit(1);
   }
 };
 
-// Vercel serverless handler
-const vercelHandler = async (req, res) => {
-  try {
-    await connectDB();
-    return app(req, res);
-  } catch (err) {
-    console.error("Request handling failed:", err);
-    res.status(500).send("Internal Server Error");
-  }
-};
-
-// Start locally if not in production
-if (process.env.NODE_ENV !== "production") {
-  connectAndStart();
-}
-
-// Always export the handler (Vercel will use this in production)
-export default vercelHandler;
+startServer();
