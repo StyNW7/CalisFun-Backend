@@ -23,6 +23,11 @@ const childSchema = new mongoose.Schema({
     writing: { type: Number, default: 0, max: 30 },
     counting: { type: Number, default: 0, max: 30 },
   },
+  countingDifficulty: {
+    type: String,
+    required: true,
+    default: "easy",
+  },
 });
 
 const userSchema = new mongoose.Schema({
@@ -49,11 +54,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: "parent",
-  },
-  countingDifficulty: {
-    type: String,
-    required: true,
-    default: "easy",
   },
   children: [childSchema],
 });

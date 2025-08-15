@@ -25,7 +25,11 @@ router.put("/auth/change-password/:id", changePassword);
 router.get("/user/profile", protect, getUserProfile);
 
 //counting routes
-router.put("/user/counting-difficulty", protect, updateCountingDifficulty);
+router.put(
+  "/children/:childId/counting-difficulty",
+  protect,
+  updateCountingDifficulty
+);
 
 // Child routes
 router.post("/children", protect, upload.single("avatar"), createChild);
