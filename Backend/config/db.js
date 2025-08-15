@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-//this is using AI because i'm encountering issues with file uploads
+//this is using AI because i'm encountering issues with file uploads (RADITYA - 15/08/2025)
 let bucket; // Variable for storing connections to GridFS buckets
 
 export const connectDB = async () => {
