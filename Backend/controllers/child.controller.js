@@ -25,7 +25,7 @@ export const createChild = async (req, res) => {
     await parent.save();
 
     res.status(201).json({
-      message: "Profil anak berhasil dibuat.",
+      message: "Profile Children Succesfully Created",
       child: parent.children[parent.children.length - 1],
     });
   } catch (error) {
@@ -40,7 +40,7 @@ export const getChildren = async (req, res) => {
   try {
     const parent = await User.findById(parentId).select("children");
     if (!parent) {
-      return res.status(404).json({ message: "Pengguna tidak ditemukan." });
+      return res.status(404).json({ message: "User not found" });
     }
 
     res.status(200).json(parent.children);
