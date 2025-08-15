@@ -13,7 +13,6 @@ export const seedWriting = async () => {
     { word: "globalisasi", difficulty: "hard" },
   ];
 
-  await WritingQuestion.deleteMany({});
   await WritingQuestion.insertMany(writingQuestions);
   console.log("Writing questions seeded successfully!");
 };
