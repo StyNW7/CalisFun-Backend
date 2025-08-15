@@ -5,16 +5,15 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-
 const dummyUser = [
   {
     username: "tes",
     email: "test@gmail.com",
+    number: "08123456789",
     password: "tes",
-    role: "user"
+    role: "user",
   },
 ];
-
 
 const yogyakartaLandmarks = [
   {
@@ -49,10 +48,10 @@ const questions = [
 ];
 
 async function seed() {
-
   try {
-
-    await mongoose.connect("mongodb+srv://root:root@cluster0.llarrr4.mongodb.net/calis-fun?retryWrites=true&w=majority&appName=Cluster0");
+    await mongoose.connect(
+      "mongodb+srv://root:root@cluster0.llarrr4.mongodb.net/calis-fun?retryWrites=true&w=majority&appName=Cluster0"
+    );
 
     console.log("MongoDB connected for seeding");
 
@@ -69,7 +68,6 @@ async function seed() {
     console.error("Error seeding data:", error);
     mongoose.connection.close();
   }
-
 }
 
 seed();
