@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-//this is using AI because i'm encountering issues with file uploads (RADITYA - 15/08/2025)
 let bucket; // Variable for storing connections to GridFS buckets
+
+// Design Pattern: Singleton -> Connect Instance DB
 
 export const connectDB = async () => {
   try {
@@ -15,5 +16,7 @@ export const connectDB = async () => {
     process.exit(1);
   }
 };
+
+// Design Pattern: Singleton -> Connect Instance Bucket
 
 export const getbucket = () => bucket;
