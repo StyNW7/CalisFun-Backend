@@ -48,3 +48,37 @@ export const getChildren = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+export const updateChild = async (req, res) => {
+  const id = req.params.childId;
+  const name = req.body.name;
+  const avatarImg = req.file;
+  const parentId = req.user.userId;
+
+  try {
+    const parent = await User.findById(parentId);
+    if (!parent) {
+      return res.status(404).json({ message: "Parent not found" });
+    }
+
+    const child = parent.children.id(id);
+    if (!child) {
+      return res.status(404).json({ message: "Child not found" });
+    }
+
+    child.name = name;
+    if (avatarImg) {
+      const uploadResult = await uploadFileToGridFS(
+        avatarImg.buffer,
+        avatarImg.originalname
+      );
+      child.avatarImg = uploadResult.fileId.toString();
+    }
+
+    await parent.save();
+    res.status(200).json({ message: "Child updated successfully", child });
+  } catch (error) {
+    console.error("Error updating child:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

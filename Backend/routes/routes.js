@@ -7,7 +7,11 @@ import {
 import { getUserProfile } from "../controllers/user.controller.js";
 import { protect } from "../middleware/protect.js";
 import { updateCountingDifficulty } from "../controllers/counting.controller.js";
-import { createChild, getChildren } from "../controllers/child.controller.js";
+import {
+  createChild,
+  getChildren,
+  updateChild,
+} from "../controllers/child.controller.js";
 import upload from "../middleware/upload.js";
 
 const router = express.Router();
@@ -26,5 +30,6 @@ router.put("/user/counting-difficulty", protect, updateCountingDifficulty);
 // Child routes
 router.post("/children", protect, upload.single("avatar"), createChild);
 router.get("/children", protect, getChildren);
+router.put("/children/:childId", protect, upload.single("avatar"), updateChild);
 
 export default router;
