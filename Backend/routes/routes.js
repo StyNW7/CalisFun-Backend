@@ -13,6 +13,8 @@ import {
   updateChild,
 } from "../controllers/child.controller.js";
 import upload from "../middleware/upload.js";
+import { createReadingQuestion } from "../controllers/reading.controller.js";
+import { createWritingQuestion } from "../controllers/writing.controller.js";
 
 const router = express.Router();
 
@@ -35,5 +37,9 @@ router.put(
 router.post("/children", protect, upload.single("avatar"), createChild);
 router.get("/children", protect, getChildren);
 router.put("/children/:childId", protect, upload.single("avatar"), updateChild);
+
+// reading and writing question
+router.post("/reading/create", protect, createReadingQuestion);
+router.post("/writing/create", protect, createWritingQuestion);
 
 export default router;
