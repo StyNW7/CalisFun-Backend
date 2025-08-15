@@ -1,6 +1,30 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+const childSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  avatarImg: {
+    type: String,
+    required: true,
+  },
+  level: {
+    type: Number,
+    default: 1,
+  },
+  xp: {
+    type: Number,
+    default: 0,
+  },
+  progress: {
+    reading: { type: Number, default: 0, max: 30 },
+    writing: { type: Number, default: 0, max: 30 },
+    counting: { type: Number, default: 0, max: 30 },
+  },
+});
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -24,13 +48,14 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    default: "user",
+    default: "parent",
   },
   countingDifficulty: {
     type: String,
     required: true,
     default: "easy",
   },
+  children: [childSchema],
 });
 
 userSchema.pre("save", async function (next) {
