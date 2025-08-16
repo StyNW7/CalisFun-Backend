@@ -46,6 +46,6 @@ router.post("/writing/create", protect, createWritingQuestion);
 
 
 // Chatbot
-router.post("/chat", protect, chatWithAI); 
+router.post("/chat", chatWithAI); 
 
 export default router;
