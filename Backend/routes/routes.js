@@ -16,12 +16,14 @@ import upload from "../middleware/upload.js";
 import { createReadingQuestion } from "../controllers/reading.controller.js";
 import { createWritingQuestion } from "../controllers/writing.controller.js";
 
+import { chatWithAI } from "../controllers/chatbot.controller.js";
+
 const router = express.Router();
 
 //auth routes
 router.post("/auth/register", registerUser);
 router.post("/auth/login", loginUser);
-router.put("/auth/change-password/:id", changePassword);
+router.put("/auth/change-password/:id", protect, changePassword);
 
 //user routes
 router.get("/user/profile", protect, getUserProfile);
@@ -41,5 +43,9 @@ router.put("/children/:childId", protect, upload.single("avatar"), updateChild);
 // reading and writing question
 router.post("/reading/create", protect, createReadingQuestion);
 router.post("/writing/create", protect, createWritingQuestion);
+
+
+// Chatbot
+router.post("/chat", protect, chatWithAI); 
 
 export default router;

@@ -21,12 +21,15 @@ const childSchema = new mongoose.Schema({
   progress: {
     reading: { type: Number, default: 0, max: 30 },
     writing: { type: Number, default: 0, max: 30 },
-    counting: { type: Number, default: 0, max: 30 },
   },
   countingDifficulty: {
     type: String,
     required: true,
     default: "easy",
+  },
+  streak: {
+    type: Number,
+    default: 0,
   },
 });
 
@@ -41,7 +44,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  number: {
+  phone_number: {
     type: String,
     required: true,
     unique: true,
