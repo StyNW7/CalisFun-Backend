@@ -11,10 +11,19 @@ import {
   createChild,
   getChildren,
   updateChild,
+  deleteChild,
 } from "../controllers/child.controller.js";
 import upload from "../middleware/upload.js";
-import { createReadingQuestion } from "../controllers/reading.controller.js";
-import { createWritingQuestion } from "../controllers/writing.controller.js";
+import {
+  createReadingQuestion,
+  getReadingQuestions,
+  deleteReadingQuestion,
+} from "../controllers/reading.controller.js";
+import {
+  createWritingQuestion,
+  getWritingQuestions,
+  deleteWritingQuestion,
+} from "../controllers/writing.controller.js";
 
 import { chatWithAI } from "../controllers/chatbot.controller.js";
 
@@ -30,22 +39,31 @@ router.get("/user/profile", protect, getUserProfile);
 
 //counting routes
 router.put(
-  "/children/:childId/counting-difficulty",
+  "/children/counting-difficulty/:childId",
   protect,
   updateCountingDifficulty
 );
 
 // Child routes
-router.post("/children", protect, upload.single("avatar"), createChild);
+router.post("/children/create", protect, upload.single("avatar"), createChild);
+router.delete("/children/delete/:childId", protect, deleteChild);
 router.get("/children", protect, getChildren);
-router.put("/children/:childId", protect, upload.single("avatar"), updateChild);
+router.put(
+  "/children/update/:childId",
+  protect,
+  upload.single("avatar"),
+  updateChild
+);
 
 // reading and writing question
 router.post("/reading/create", protect, createReadingQuestion);
 router.post("/writing/create", protect, createWritingQuestion);
-
+router.delete("/reading/delete/:id", protect, deleteReadingQuestion);
+router.delete("/writing/delete/:id", protect, deleteWritingQuestion);
+router.get("/reading", protect, getReadingQuestions);
+router.get("/writing", protect, getWritingQuestions);
 
 // Chatbot
-router.post("/chat", chatWithAI); 
+router.post("/chat", chatWithAI);
 
 export default router;

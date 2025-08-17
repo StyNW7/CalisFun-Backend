@@ -82,3 +82,28 @@ export const updateChild = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const deleteChild = async (req, res) => {
+  const { childId } = req.params;
+  const { userId } = req.user;
+
+  try {
+    const parent = await User.findById(userId);
+    if (!parent) {
+      return res.status(404).json({ message: "Parent not found" });
+    }
+
+    const child = parent.children.id(childId);
+    if (!child) {
+      return res.status(404).json({ message: "Child not found" });
+    }
+
+    child.deleteOne();
+
+    await parent.save();
+    res.status(200).json({ message: "Child deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting child:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

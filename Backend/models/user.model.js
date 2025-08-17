@@ -19,8 +19,8 @@ const childSchema = new mongoose.Schema({
     default: 0,
   },
   progress: {
-    reading: { type: Number, default: 0, max: 30 },
-    writing: { type: Number, default: 0, max: 30 },
+    reading: { type: Number, default: 0 },
+    writing: { type: Number, default: 0 },
   },
   countingDifficulty: {
     type: String,
