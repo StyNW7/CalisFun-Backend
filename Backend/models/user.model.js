@@ -19,8 +19,18 @@ const childSchema = new mongoose.Schema({
     default: 0,
   },
   progress: {
-    reading: { type: Number, default: 0 },
-    writing: { type: Number, default: 0 },
+    reading: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ReadingQuestion",
+      },
+    ],
+    writing: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "WritingQuestion",
+      },
+    ],
   },
   countingDifficulty: {
     type: String,
