@@ -5,10 +5,10 @@ const readingQuestionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  difficulty: {
+  category: {
     type: String,
     required: true,
-    enum: ["easy", "medium", "hard"],
+    enum: ["word", "number", "letter"],
   },
 });
 
