@@ -23,7 +23,7 @@ export const registerUser = async (req, res) => {
       email,
       phone_number,
       password,
-      role: "user",
+      role: "parent",
     });
 
     await newUser.save();
