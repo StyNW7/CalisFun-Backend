@@ -36,3 +36,19 @@ export const getWritingQuestions = async (req, res) => {
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
+
+export const deleteWritingQuestion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const question = await WritingQuestion.findByIdAndDelete(id);
+
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    res.status(200).json({ message: "Writing question deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
