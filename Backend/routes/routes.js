@@ -13,8 +13,14 @@ import {
   updateChild,
 } from "../controllers/child.controller.js";
 import upload from "../middleware/upload.js";
-import { createReadingQuestion } from "../controllers/reading.controller.js";
-import { createWritingQuestion } from "../controllers/writing.controller.js";
+import {
+  createReadingQuestion,
+  getReadingQuestions,
+} from "../controllers/reading.controller.js";
+import {
+  createWritingQuestion,
+  getWritingQuestions,
+} from "../controllers/writing.controller.js";
 
 import { chatWithAI } from "../controllers/chatbot.controller.js";
 
@@ -36,16 +42,17 @@ router.put(
 );
 
 // Child routes
-router.post("/children", protect, upload.single("avatar"), createChild);
+router.post("/children/create", protect, upload.single("avatar"), createChild);
 router.get("/children", protect, getChildren);
 router.put("/children/:childId", protect, upload.single("avatar"), updateChild);
 
 // reading and writing question
 router.post("/reading/create", protect, createReadingQuestion);
 router.post("/writing/create", protect, createWritingQuestion);
-
+router.get("/reading", protect, getReadingQuestions);
+router.get("/writing", protect, getWritingQuestions);
 
 // Chatbot
-router.post("/chat", chatWithAI); 
+router.post("/chat", chatWithAI);
 
 export default router;
