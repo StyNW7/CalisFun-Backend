@@ -58,8 +58,8 @@ router.put(
 // reading and writing question
 router.post("/reading/create", protect, createReadingQuestion);
 router.post("/writing/create", protect, createWritingQuestion);
-router.post("/reading/delete/:id", protect, deleteReadingQuestion);
-router.post("/writing/delete/:id", protect, deleteWritingQuestion);
+router.delete("/reading/delete/:id", protect, deleteReadingQuestion);
+router.delete("/writing/delete/:id", protect, deleteWritingQuestion);
 router.get("/reading", protect, getReadingQuestions);
 router.get("/writing", protect, getWritingQuestions);
 
