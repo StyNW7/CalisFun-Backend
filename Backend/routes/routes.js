@@ -18,11 +18,13 @@ import {
   createReadingQuestion,
   getReadingQuestions,
   deleteReadingQuestion,
+  updateUserReadingProgress,
 } from "../controllers/reading.controller.js";
 import {
   createWritingQuestion,
   getWritingQuestions,
   deleteWritingQuestion,
+  updateUserWritingProgress,
 } from "../controllers/writing.controller.js";
 
 import { chatWithAI } from "../controllers/chatbot.controller.js";
@@ -55,13 +57,17 @@ router.put(
   updateChild
 );
 
-// reading and writing question
+// Reading Question Routes
 router.post("/reading/create", protect, createReadingQuestion);
+router.get("/reading/:childId", protect, getReadingQuestions);
+router.post("/reading/progress/:childId", protect, updateUserReadingProgress);
+// router.delete("/reading/delete/:id", protect, deleteReadingQuestion);
+
+// Writing Question Routes
 router.post("/writing/create", protect, createWritingQuestion);
-router.delete("/reading/delete/:id", protect, deleteReadingQuestion);
-router.delete("/writing/delete/:id", protect, deleteWritingQuestion);
-router.get("/reading", protect, getReadingQuestions);
-router.get("/writing", protect, getWritingQuestions);
+router.get("/writing/:childId", protect, getWritingQuestions);
+router.post("/writing/progress/:childId", protect, updateUserWritingProgress);
+// router.delete("/writing/delete/:id", protect, deleteWritingQuestion);
 
 // Chatbot
 router.post("/chat", chatWithAI);
