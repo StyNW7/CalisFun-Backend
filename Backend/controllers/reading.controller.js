@@ -2,9 +2,9 @@ import ReadingQuestion from "../models/reading.model.js";
 
 export const createReadingQuestion = async (req, res) => {
   try {
-    const { word, difficulty } = req.body;
+    const { word, category } = req.body;
 
-    if (!word || !difficulty) {
+    if (!word || !category) {
       return res
         .status(400)
         .json({ message: "Please provide all required fields." });
@@ -12,7 +12,7 @@ export const createReadingQuestion = async (req, res) => {
 
     const newQuestion = new ReadingQuestion({
       word,
-      difficulty,
+      category,
     });
 
     await newQuestion.save();
