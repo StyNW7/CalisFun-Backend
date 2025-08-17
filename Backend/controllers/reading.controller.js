@@ -11,9 +11,15 @@ export const createReadingQuestion = async (req, res) => {
         .json({ message: "Please provide all required fields." });
     }
 
+    const lastQuestion = await ReadingQuestion.findOne({ category }).sort({
+      level: -1,
+    });
+    const nextLevel = lastQuestion ? lastQuestion.level + 1 : 1;
+
     const newQuestion = new ReadingQuestion({
       word,
       category,
+      level: nextLevel,
     });
 
     await newQuestion.save();
@@ -45,7 +51,7 @@ export const getReadingQuestions = async (req, res) => {
 
     const nextQuestion = await ReadingQuestion.findOne({
       _id: { $nin: child.progress.reading },
-    });
+    }).sort({ level: 1 });
 
     if (!nextQuestion) {
       return res
@@ -54,6 +60,34 @@ export const getReadingQuestions = async (req, res) => {
     }
 
     res.status(200).json(nextQuestion);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+export const updateReadingQuestion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { word } = req.body;
+
+    if (!word) {
+      return res.status(400).json({ message: "Word is required." });
+    }
+
+    const question = await ReadingQuestion.findByIdAndUpdate(
+      id,
+      { word },
+      { new: true }
+    );
+
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Reading question updated successfully", question });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error. Please try again later." });

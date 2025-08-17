@@ -10,6 +10,10 @@ const readingQuestionSchema = new mongoose.Schema({
     required: true,
     enum: ["word", "number", "letter"],
   },
+  level: {
+    type: Number,
+    required: true,
+  },
 });
 
 const ReadingQuestion = mongoose.model(
