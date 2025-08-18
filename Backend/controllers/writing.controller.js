@@ -66,6 +66,16 @@ export const getWritingQuestions = async (req, res) => {
   }
 };
 
+export const getAllWritingQuestions = async (req, res) => {
+  try {
+    const questions = await WritingQuestion.find();
+    res.status(200).json(questions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
 export const updateWritingQuestion = async (req, res) => {
   try {
     const { id } = req.params;

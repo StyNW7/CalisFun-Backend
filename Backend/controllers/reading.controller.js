@@ -66,6 +66,16 @@ export const getReadingQuestions = async (req, res) => {
   }
 };
 
+export const getAllReadingQuestions = async (req, res) => {
+  try {
+    const questions = await ReadingQuestion.find();
+    res.status(200).json(questions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
 export const updateReadingQuestion = async (req, res) => {
   try {
     const { id } = req.params;

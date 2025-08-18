@@ -4,8 +4,9 @@ import {
   loginUser,
   changePassword,
 } from "../controllers/auth.controller.js";
-import { getUserProfile } from "../controllers/user.controller.js";
+import { getUserProfile, getAllUsers } from "../controllers/user.controller.js";
 import { protect } from "../middleware/protect.js";
+import { isAdmin } from "../middleware/admin.js";
 import { updateCountingDifficulty } from "../controllers/counting.controller.js";
 import {
   createChild,
@@ -20,6 +21,7 @@ import {
   deleteReadingQuestion,
   updateUserReadingProgress,
   updateReadingQuestion,
+  getAllReadingQuestions,
 } from "../controllers/reading.controller.js";
 import {
   createWritingQuestion,
@@ -27,6 +29,7 @@ import {
   deleteWritingQuestion,
   updateUserWritingProgress,
   updateWritingQuestion,
+  getAllWritingQuestions,
 } from "../controllers/writing.controller.js";
 
 import { chatWithAI } from "../controllers/chatbot.controller.js";
@@ -60,20 +63,27 @@ router.put(
 );
 
 // Reading Question Routes
-router.post("/reading/create", protect, createReadingQuestion);
 router.get("/reading/:childId", protect, getReadingQuestions);
-router.put("/reading/update/:id", protect, updateReadingQuestion);
 router.post("/reading/progress/:childId", protect, updateUserReadingProgress);
-// router.delete("/reading/delete/:id", protect, deleteReadingQuestion);
 
 // Writing Question Routes
-router.post("/writing/create", protect, createWritingQuestion);
+
 router.get("/writing/:childId", protect, getWritingQuestions);
-router.put("/writing/update/:id", protect, updateWritingQuestion);
 router.post("/writing/progress/:childId", protect, updateUserWritingProgress);
-// router.delete("/writing/delete/:id", protect, deleteWritingQuestion);
 
 // Chatbot
 router.post("/chat", chatWithAI);
 
+//Admin routes
+router.get("/users/all", protect, isAdmin, getAllUsers);
+
+router.post("/reading/create", protect, isAdmin, createReadingQuestion);
+router.put("/reading/update/:id", protect, isAdmin, updateReadingQuestion);
+router.get("/reading/all", protect, isAdmin, getAllReadingQuestions);
+// router.delete("/reading/delete/:id", protect, isAdmin, deleteReadingQuestion);
+
+router.post("/writing/create", protect, isAdmin, createWritingQuestion);
+router.put("/writing/update/:id", protect, isAdmin, updateWritingQuestion);
+router.get("/writing/all", protect, isAdmin, getAllWritingQuestions);
+// router.delete("/writing/delete/:id", protect, isAdmin, deleteWritingQuestion);
 export default router;
