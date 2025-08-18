@@ -32,6 +32,7 @@ import {
   getAllWritingQuestions,
 } from "../controllers/writing.controller.js";
 
+import { getQuestionStats } from "../controllers/stats.controller.js";
 import { chatWithAI } from "../controllers/chatbot.controller.js";
 
 const router = express.Router();
@@ -73,6 +74,9 @@ router.post("/writing/progress/:childId", protect, updateUserWritingProgress);
 
 // Chatbot
 router.post("/chat", chatWithAI);
+
+//stats routes
+router.get("/questions/stats", protect, getQuestionStats);
 
 //Admin routes
 router.get("/users/all", protect, isAdmin, getAllUsers);
