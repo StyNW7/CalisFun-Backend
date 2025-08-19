@@ -68,12 +68,12 @@ router.put(
 
 // Reading Question Routes
 router.get("/reading/all", protect, isAdmin, getAllReadingQuestions);
-router.get("/reading/:childId", protect, getReadingQuestions);
+router.get("/reading/user/:childId", protect, getReadingQuestions);
 router.post("/reading/progress/:childId", protect, updateUserReadingProgress);
 
 // Writing Question Routes
 router.get("/writing/all", protect, isAdmin, getAllWritingQuestions);
-router.get("/writing/:childId", protect, getWritingQuestions);
+router.get("/writing/user/:childId", protect, getWritingQuestions);
 router.post("/writing/progress/:childId", protect, updateUserWritingProgress);
 
 // Chatbot
