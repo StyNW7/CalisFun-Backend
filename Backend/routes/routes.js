@@ -38,24 +38,33 @@ import {
 } from "../controllers/stats.controller.js";
 import { chatWithAI } from "../controllers/chatbot.controller.js";
 
+
 const router = express.Router();
 
+
 //auth routes
+
 router.post("/auth/register", registerUser);
 router.post("/auth/login", loginUser);
 router.put("/auth/change-password/:id", protect, changePassword);
 
+
 //user routes
+
 router.get("/user/profile", protect, getUserProfile);
 
+
 //counting routes
+
 router.put(
   "/children/counting-difficulty/:childId",
   protect,
   updateCountingDifficulty
 );
 
+
 // Child routes
+
 router.post("/children/create", protect, upload.single("avatar"), createChild);
 router.delete("/children/delete/:childId", protect, deleteChild);
 router.get("/children", protect, getChildren);
@@ -66,31 +75,46 @@ router.put(
   updateChild
 );
 
+
 // Reading Question Routes
+
 router.get("/reading/all", protect, isAdmin, getAllReadingQuestions);
 router.get("/reading/user/:childId", protect, getReadingQuestions);
 router.post("/reading/progress/:childId", protect, updateUserReadingProgress);
 
+
+
 // Writing Question Routes
+
 router.get("/writing/all", protect, isAdmin, getAllWritingQuestions);
 router.get("/writing/user/:childId", protect, getWritingQuestions);
 router.post("/writing/progress/:childId", protect, updateUserWritingProgress);
 
+
+
 // Chatbot
+
 router.post("/chat", chatWithAI);
 
+
 //stats routes
+
 router.get("/questions/stats", protect, isAdmin, getQuestionStats);
 router.get("/children/stats/:childId", protect, getChildProgressStats);
 
+
+
 //Admin routes
+
 router.get("/users/all", protect, isAdmin, getAllUsers);
 
 router.post("/reading/create", protect, isAdmin, createReadingQuestion);
 router.put("/reading/update/:id", protect, isAdmin, updateReadingQuestion);
-// router.delete("/reading/delete/:id", protect, isAdmin, deleteReadingQuestion);
+router.delete("/reading/delete/:id", protect, isAdmin, deleteReadingQuestion);
 
 router.post("/writing/create", protect, isAdmin, createWritingQuestion);
 router.put("/writing/update/:id", protect, isAdmin, updateWritingQuestion);
-// router.delete("/writing/delete/:id", protect, isAdmin, deleteWritingQuestion);
+router.delete("/writing/delete/:id", protect, isAdmin, deleteWritingQuestion);
+
+
 export default router;
