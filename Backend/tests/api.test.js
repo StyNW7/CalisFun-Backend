@@ -5,7 +5,7 @@ import "../tests/setup.js";
 import User from "../models/user.model.js";
 import ReadingQuestion from "../models/reading.model.js";
 import WritingQuestion from "../models/writing.model.js";
-
+jest.mock("../controllers/chatbot.controller.js");
 const app = express();
 app.use(express.json());
 app.use("/api", router);
