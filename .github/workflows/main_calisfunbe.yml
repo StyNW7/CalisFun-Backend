@@ -38,6 +38,11 @@ jobs:
       - name: Run tests
         working-directory: ./Backend
         run: npm test
+        env:
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+          AZURE_API_VERSION: ${{ secrets.AZURE_API_VERSION }}
+          AZURE_OPENAI_DEPLOYMENT: ${{ secrets.AZURE_OPENAI_DEPLOYMENT }}
 
   build_and_deploy:
     runs-on: ubuntu-latest
