@@ -38,6 +38,7 @@ export const getReadingQuestions = async (req, res) => {
   try {
     const { childId } = req.params;
     const { userId } = req.user;
+    const { category } = req.query;
 
     const parent = await User.findById(userId);
     if (!parent) {
@@ -49,9 +50,17 @@ export const getReadingQuestions = async (req, res) => {
       return res.status(404).json({ message: "Child not found" });
     }
 
-    const nextQuestion = await ReadingQuestion.findOne({
+    const query = {
       _id: { $nin: child.progress.reading },
-    }).sort({ level: 1 });
+    };
+
+    if (category) {
+      query.category = category;
+    }
+
+    const nextQuestion = await ReadingQuestion.findOne(query).sort({
+      level: 1,
+    });
 
     if (!nextQuestion) {
       return res

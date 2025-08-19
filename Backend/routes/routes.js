@@ -32,6 +32,10 @@ import {
   getAllWritingQuestions,
 } from "../controllers/writing.controller.js";
 
+import {
+  getQuestionStats,
+  getChildProgressStats,
+} from "../controllers/stats.controller.js";
 import { chatWithAI } from "../controllers/chatbot.controller.js";
 
 const router = express.Router();
@@ -63,27 +67,30 @@ router.put(
 );
 
 // Reading Question Routes
+router.get("/reading/all", protect, isAdmin, getAllReadingQuestions);
 router.get("/reading/user/:childId", protect, getReadingQuestions);
 router.post("/reading/progress/:childId", protect, updateUserReadingProgress);
 
 // Writing Question Routes
-
+router.get("/writing/all", protect, isAdmin, getAllWritingQuestions);
 router.get("/writing/user/:childId", protect, getWritingQuestions);
 router.post("/writing/progress/:childId", protect, updateUserWritingProgress);
 
 // Chatbot
 router.post("/chat", chatWithAI);
 
+//stats routes
+router.get("/questions/stats", protect, isAdmin, getQuestionStats);
+router.get("/children/stats/:childId", protect, getChildProgressStats);
+
 //Admin routes
 router.get("/users/all", protect, isAdmin, getAllUsers);
 
 router.post("/reading/create", protect, isAdmin, createReadingQuestion);
 router.put("/reading/update/:id", protect, isAdmin, updateReadingQuestion);
-router.get("/reading/all", protect, isAdmin, getAllReadingQuestions);
 // router.delete("/reading/delete/:id", protect, isAdmin, deleteReadingQuestion);
 
 router.post("/writing/create", protect, isAdmin, createWritingQuestion);
 router.put("/writing/update/:id", protect, isAdmin, updateWritingQuestion);
-router.get("/writing/all", protect, isAdmin, getAllWritingQuestions);
 // router.delete("/writing/delete/:id", protect, isAdmin, deleteWritingQuestion);
 export default router;
