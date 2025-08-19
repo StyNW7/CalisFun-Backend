@@ -24,3 +24,27 @@ export const getAllUsers = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const getLeaderboard = async (req, res) => {
+  try {
+    const leaderboard = await User.aggregate([
+      { $unwind: "$children" },
+      { $sort: { "children.xp": -1 } },
+      { $replaceRoot: { newRoot: "$children" } },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          avatarImg: 1,
+          level: 1,
+          xp: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(leaderboard);
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

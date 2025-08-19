@@ -133,6 +133,11 @@ export const updateUserWritingProgress = async (req, res) => {
       return res.status(404).json({ message: "Child not found" });
     }
 
+    child.xp += 20;
+    if (child.xp >= child.level * 100) {
+      child.level++;
+    }
+
     child.progress.writing.push(questionId);
     await parent.save();
 

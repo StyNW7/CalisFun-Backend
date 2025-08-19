@@ -4,7 +4,11 @@ import {
   loginUser,
   changePassword,
 } from "../controllers/auth.controller.js";
-import { getUserProfile, getAllUsers } from "../controllers/user.controller.js";
+import {
+  getUserProfile,
+  getAllUsers,
+  getLeaderboard,
+} from "../controllers/user.controller.js";
 import { protect } from "../middleware/protect.js";
 import { isAdmin } from "../middleware/admin.js";
 import { updateCountingDifficulty } from "../controllers/counting.controller.js";
@@ -12,6 +16,7 @@ import {
   createChild,
   getChildren,
   updateChild,
+  updateChildStreak,
   deleteChild,
 } from "../controllers/child.controller.js";
 import upload from "../middleware/upload.js";
@@ -47,6 +52,7 @@ router.put("/auth/change-password/:id", protect, changePassword);
 
 //user routes
 router.get("/user/profile", protect, getUserProfile);
+router.get("/leaderboard", protect, getLeaderboard);
 
 //counting routes
 router.put(
@@ -65,6 +71,7 @@ router.put(
   upload.single("avatar"),
   updateChild
 );
+router.put("/children/streak/:childId", protect, updateChildStreak);
 
 // Reading Question Routes
 router.get("/reading/all", protect, isAdmin, getAllReadingQuestions);

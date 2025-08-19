@@ -41,6 +41,10 @@ const childSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  lastStreakUpdate: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const userSchema = new mongoose.Schema({

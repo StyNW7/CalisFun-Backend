@@ -83,6 +83,42 @@ export const updateChild = async (req, res) => {
   }
 };
 
+export const updateChildStreak = async (req, res) => {
+  const { childId } = req.params;
+  const { streak } = req.body;
+  const { userId } = req.user;
+
+  if (typeof streak !== "number" || streak < 0) {
+    return res.status(400).json({ message: "Invalid streak value." });
+  }
+
+  try {
+    const parent = await User.findById(userId);
+    if (!parent) {
+      return res.status(404).json({ message: "Parent not found" });
+    }
+
+    const child = parent.children.id(childId);
+    if (!child) {
+      return res.status(404).json({ message: "Child not found" });
+    }
+
+    child.streak = streak;
+    child.lastStreakUpdate = new Date();
+
+    await parent.save();
+
+    res.status(200).json({
+      message: "Streak updated successfully",
+      streak: child.streak,
+      lastStreakUpdate: child.lastStreakUpdate,
+    });
+  } catch (error) {
+    console.error("Error updating streak:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 export const deleteChild = async (req, res) => {
   const { childId } = req.params;
   const { userId } = req.user;
