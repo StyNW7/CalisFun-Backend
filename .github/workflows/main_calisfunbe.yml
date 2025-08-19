@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App and Vercel- calisfunbe -tes
+name: CI/CD for CalisFun Backend
 
 on:
   push:
@@ -11,11 +11,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
+    name: Run Jest Tests
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,7 +23,7 @@ jobs:
         with:
           node-version: "22.x"
 
-      - name: Cache dependencies // Cache for npm dependencies
+      - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ~/.npm
@@ -37,9 +35,36 @@ jobs:
         working-directory: ./Backend
         run: npm install
 
-      # - name: Run tests
-      #   working-directory: ./Backend
-      #   run: npm test --if-present
+      - name: Run tests
+        working-directory: ./Backend
+        run: npm test
+
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    name: Build and Deploy
+    needs: test
+    if: github.ref == 'refs/heads/main' # Opsional: Hanya deploy jika push ke branch 'main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22.x"
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        working-directory: ./Backend
+        run: npm install
 
       - name: Build
         working-directory: ./Backend
