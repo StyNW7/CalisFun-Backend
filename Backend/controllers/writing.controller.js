@@ -11,11 +11,32 @@ export const createWritingQuestion = async (req, res) => {
         .json({ message: "Please provide all required fields." });
     }
 
+    // Check if word already exists (case-sensitive)
+    const existingQuestion = await WritingQuestion.findOne({ 
+      word: word,
+      category: category 
+    });
+
+    if (existingQuestion) {
+      return res.status(409).json({
+        message: "Question already exists.",
+        error: `The word "${word}" already exists in the ${category} category.`,
+        existingQuestion: {
+          _id: existingQuestion._id,
+          word: existingQuestion.word,
+          category: existingQuestion.category,
+          level: existingQuestion.level
+        }
+      });
+    }
+
+    // Find the next level for this category
     const lastQuestion = await WritingQuestion.findOne({ category }).sort({
       level: -1,
     });
     const nextLevel = lastQuestion ? lastQuestion.level + 1 : 1;
 
+    // Create new question
     const newQuestion = new WritingQuestion({
       word,
       category,
@@ -29,9 +50,23 @@ export const createWritingQuestion = async (req, res) => {
       question: newQuestion,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error. Please try again later." });
+    console.error("Error creating writing question:", error);
+    
+    // Handle duplicate key error (if unique index is set in schema)
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: "Question already exists.",
+        error: "This word already exists in the specified category.",
+        details: error.keyValue
+      });
+    }
+
+    res.status(500).json({ 
+      message: "Server error. Please try again later.",
+      error: error.message 
+    });
   }
+  
 };
 
 export const getWritingQuestions = async (req, res) => {
