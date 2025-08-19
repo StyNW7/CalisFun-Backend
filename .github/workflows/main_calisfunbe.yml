@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy
     needs: test
-    if: github.ref == 'refs/heads/main' # Opsional: Hanya deploy jika push ke branch 'main'
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout code
