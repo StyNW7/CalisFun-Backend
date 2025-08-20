@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Initialize Azure OpenAI client
+let client;
 if (process.env.NODE_ENV !== "test") {
   client = new AzureOpenAI({
     apiKey: process.env.AZURE_OPENAI_API_KEY,

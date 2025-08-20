@@ -49,6 +49,27 @@ export const getChildren = async (req, res) => {
   }
 };
 
+export const getOneChildren = async (req, res) => {
+  const parentId = req.user.userId;
+  const { childId } = req.params;
+
+  try {
+    const parent = await User.findById(parentId).select("children");
+    if (!parent) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const child = parent.children.id(childId);
+    if (!child) {
+      return res.status(404).json({ message: "Child not found" });
+    }
+
+    res.status(200).json(child);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 export const updateChild = async (req, res) => {
   const id = req.params.childId;
   const name = req.body.name;

@@ -16,6 +16,7 @@ import { updateCountingDifficulty } from "../controllers/counting.controller.js"
 import {
   createChild,
   getChildren,
+  getOneChildren,
   updateChild,
   updateChildStreak,
   deleteChild,
@@ -70,7 +71,8 @@ router.put(
 
 router.post("/children/create", protect, upload.single("avatar"), createChild);
 router.delete("/children/delete/:childId", protect, deleteChild);
-router.get("/children", protect, getChildren);
+router.get("/children/all", protect, getChildren);
+router.get("/children/one/:childId", protect, getOneChildren);
 router.put(
   "/children/update/:childId",
   protect,
