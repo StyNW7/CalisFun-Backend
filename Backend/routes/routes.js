@@ -3,6 +3,7 @@ import {
   registerUser,
   loginUser,
   changePassword,
+  logoutUser,
 } from "../controllers/auth.controller.js";
 import {
   getUserProfile,
@@ -43,22 +44,19 @@ import {
 } from "../controllers/stats.controller.js";
 import { chatWithAI } from "../controllers/chatbot.controller.js";
 
-
 const router = express.Router();
-
 
 //auth routes
 
 router.post("/auth/register", registerUser);
 router.post("/auth/login", loginUser);
 router.put("/auth/change-password/:id", protect, changePassword);
-
+router.post("/auth/logout", protect, logoutUser);
 
 //user routes
 
 router.get("/user/profile", protect, getUserProfile);
 router.get("/leaderboard", protect, getLeaderboard);
-
 
 //counting routes
 
@@ -67,7 +65,6 @@ router.put(
   protect,
   updateCountingDifficulty
 );
-
 
 // Child routes
 
@@ -82,14 +79,11 @@ router.put(
 );
 router.put("/children/streak/:childId", protect, updateChildStreak);
 
-
 // Reading Question Routes
 
 router.get("/reading/all", protect, isAdmin, getAllReadingQuestions);
 router.get("/reading/user/:childId", protect, getReadingQuestions);
 router.post("/reading/progress/:childId", protect, updateUserReadingProgress);
-
-
 
 // Writing Question Routes
 
@@ -97,19 +91,14 @@ router.get("/writing/all", protect, isAdmin, getAllWritingQuestions);
 router.get("/writing/user/:childId", protect, getWritingQuestions);
 router.post("/writing/progress/:childId", protect, updateUserWritingProgress);
 
-
-
 // Chatbot
 
 router.post("/chat", chatWithAI);
-
 
 //stats routes
 
 router.get("/questions/stats", protect, isAdmin, getQuestionStats);
 router.get("/children/stats/:childId", protect, getChildProgressStats);
-
-
 
 //Admin routes
 
@@ -122,6 +111,5 @@ router.delete("/reading/delete/:id", protect, isAdmin, deleteReadingQuestion);
 router.post("/writing/create", protect, isAdmin, createWritingQuestion);
 router.put("/writing/update/:id", protect, isAdmin, updateWritingQuestion);
 router.delete("/writing/delete/:id", protect, isAdmin, deleteWritingQuestion);
-
 
 export default router;
