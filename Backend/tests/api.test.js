@@ -99,9 +99,9 @@ describe("API Endpoints", () => {
 
   describe("Children and Progress Routes", () => {
     // Test 3: Get Children
-    it("GET /api/children - should return children for an authenticated user", async () => {
+    it("GET /api/children/all - should return children for an authenticated user", async () => {
       const res = await request(app)
-        .get("/api/children")
+        .get("/api/children/all")
         .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toEqual(200);
       expect(res.body[0].name).toBe("Anak Test");
