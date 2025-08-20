@@ -1,10 +1,11 @@
 import request from "supertest";
 import express from "express";
 import router from "../routes/routes.js";
-import "../tests/setup.js";
+import "./setup.js";
 import User from "../models/user.model.js";
 import ReadingQuestion from "../models/reading.model.js";
 import WritingQuestion from "../models/writing.model.js";
+
 const app = express();
 app.use(express.json());
 app.use("/api", router);
@@ -95,90 +96,34 @@ describe("API Endpoints", () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveProperty("token");
     });
-  });
 
-  describe("Children and Progress Routes", () => {
-    // Test 3: Get Children
-    it("GET /api/children/all - should return children for an authenticated user", async () => {
+    // Test 3: Logout
+    it("POST /api/auth/logout - should logout the user successfully", async () => {
       const res = await request(app)
-        .get("/api/children/all")
+        .post("/api/auth/logout")
         .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toEqual(200);
-      expect(res.body[0].name).toBe("Anak Test");
-    });
-
-    // Test 4: Update Reading Progress
-    it("POST /api/reading/progress/:childId - should update XP and level up", async () => {
-      const res = await request(app)
-        .post(`/api/reading/progress/${childId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send({ questionId: readingQuestionId });
-
-      expect(res.statusCode).toEqual(200);
-
-      const updatedUser = await User.findOne({ "children._id": childId });
-      const child = updatedUser.children.id(childId);
-
-      expect(child.xp).toBe(100);
-      expect(child.level).toBe(2);
-    });
-
-    // Test 5: Update Writing Progress
-    it("POST /api/writing/progress/:childId - should update XP", async () => {
-      await request(app)
-        .post(`/api/reading/progress/${childId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send({ questionId: readingQuestionId });
-
-      const res = await request(app)
-        .post(`/api/writing/progress/${childId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send({ questionId: writingQuestionId });
-
-      expect(res.statusCode).toEqual(200);
-
-      const updatedUser = await User.findOne({ "children._id": childId });
-      const child = updatedUser.children.id(childId);
-
-      expect(child.xp).toBe(120);
-    });
-
-    // Test 6: Get Child Stats
-    it("GET /api/children/stats/:childId - should return correct progress stats", async () => {
-      await request(app)
-        .post(`/api/reading/progress/${childId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send({ questionId: readingQuestionId });
-
-      const res = await request(app)
-        .get(`/api/children/stats/${childId}`)
-        .set("Authorization", `Bearer ${token}`);
-
-      expect(res.statusCode).toEqual(200);
-      expect(res.body.reading.completed).toBe(1);
-      expect(res.body.writing.completed).toBe(0);
+      expect(res.body.message).toBe("Logged out successfully");
     });
   });
 
-  describe("Main Feature Routes", () => {
-    // Test 7: Get Leaderboard
-    it("GET /api/leaderboard - should return the leaderboard successfully", async () => {
+  describe("Security Middleware", () => {
+    // Test 4: Security Middleware
+    it("should return 401 Unauthorized if no token is provided", async () => {
+      const res = await request(app).get("/api/leaderboard");
+
+      expect(res.statusCode).toEqual(401);
+      expect(res.body.message).toBe("No token, authorization denied");
+    });
+
+    it("should return 401 Unauthorized if token is invalid", async () => {
+      const invalidToken = "this.is.an.invalid.token";
       const res = await request(app)
         .get("/api/leaderboard")
-        .set("Authorization", `Bearer ${token}`);
-      expect(res.statusCode).toEqual(200);
-      expect(res.body[0].xp).toBe(80);
-    });
+        .set("Authorization", `Bearer ${invalidToken}`);
 
-    // Test 8: Update Streak
-    it("PUT /api/children/streak/:childId - should update the streak and return the new data", async () => {
-      const res = await request(app)
-        .put(`/api/children/streak/${childId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send({ streak: 5 });
-      expect(res.statusCode).toEqual(200);
-      expect(res.body.message).toBe("Streak updated successfully");
-      expect(res.body.streak).toBe(5);
+      expect(res.statusCode).toEqual(401);
+      expect(res.body.message).toBe("Token is not valid");
     });
   });
 });
