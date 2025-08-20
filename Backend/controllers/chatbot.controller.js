@@ -7,7 +7,7 @@ dotenv.config();
 let client;
 if (process.env.NODE_ENV !== "test") {
   client = new AzureOpenAI({
-    apiKey: process.env.AZURE_OPENAI_API_KEY,
+    apiKey: process.env.AZURE_OPENAI_KEY,
     apiVersion: process.env.AZURE_API_VERSION || "2023-05-15",
     endpoint: process.env.AZURE_OPENAI_ENDPOINT,
   });
