@@ -33,7 +33,7 @@ else {
     corsOptions = {
       credentials: true,
     };
-    corsOptions.origin = "https://calis-fun.vercel.app/";
+    corsOptions.origin = "https://calis-fun.vercel.app";
 }
 
 
