@@ -6,23 +6,25 @@ export const createChild = async (req, res) => {
   const { name } = req.body;
   const file = req.file;
 
-  if (!name || !file) {
+  if (!name) {
     return res.status(400).json({ message: "Name must be inputed." });
   }
 
   try {
-    const uploadResult = await uploadFileToGridFS(
-      file.buffer,
-      file.originalname
-    );
-
-    const newChild = {
+    const newChildData = {
       name: name,
-      avatarImg: uploadResult.fileId.toString(),
     };
 
+    if (file) {
+      const uploadResult = await uploadFileToGridFS(
+        file.buffer,
+        file.originalname
+      );
+      newChildData.avatarImg = uploadResult.fileId.toString();
+    }
+
     const parent = await User.findById(req.user.userId);
-    parent.children.push(newChild);
+    parent.children.push(newChildData);
     await parent.save();
 
     res.status(201).json({

@@ -8,7 +8,7 @@ const childSchema = new mongoose.Schema({
   },
   avatarImg: {
     type: String,
-    required: true,
+    required: false,
   },
   level: {
     type: Number,
