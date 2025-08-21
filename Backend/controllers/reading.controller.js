@@ -12,9 +12,9 @@ export const createReadingQuestion = async (req, res) => {
     }
 
     // Check if word already exists (case-sensitive)
-    const existingQuestion = await ReadingQuestion.findOne({ 
+    const existingQuestion = await ReadingQuestion.findOne({
       word: word,
-      category: category 
+      category: category,
     });
 
     if (existingQuestion) {
@@ -25,8 +25,8 @@ export const createReadingQuestion = async (req, res) => {
           _id: existingQuestion._id,
           word: existingQuestion.word,
           category: existingQuestion.category,
-          level: existingQuestion.level
-        }
+          level: existingQuestion.level,
+        },
       });
     }
 
@@ -51,19 +51,19 @@ export const createReadingQuestion = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating reading question:", error);
-    
+
     // Handle duplicate key error (if unique index is set in schema)
     if (error.code === 11000) {
       return res.status(409).json({
         message: "Question already exists.",
         error: "This word already exists in the specified category.",
-        details: error.keyValue
+        details: error.keyValue,
       });
     }
 
-    res.status(500).json({ 
+    res.status(500).json({
       message: "Server error. Please try again later.",
-      error: error.message 
+      error: error.message,
     });
   }
 };
@@ -111,11 +111,17 @@ export const getReadingQuestions = async (req, res) => {
 
 export const getAllReadingQuestions = async (req, res) => {
   try {
-    const questions = await ReadingQuestion.find();
+    const filter = {};
+
+    if (req.query.category) {
+      filter.category = req.query.category;
+    }
+
+    const questions = await ReadingQuestion.find(filter);
+
     res.status(200).json(questions);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error. Please try again later." });
+    res.status(500).json({ message: "Server error" });
   }
 };
 

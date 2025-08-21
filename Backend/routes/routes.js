@@ -87,13 +87,13 @@ router.put("/children/streak/:childId", protect, updateChildStreak);
 
 // Reading Question Routes
 
-router.get("/reading/all", protect, isAdmin, getAllReadingQuestions);
+router.get("/reading/all", protect, getAllReadingQuestions);
 router.get("/reading/user/:childId", protect, getReadingQuestions);
 router.post("/reading/progress/:childId", protect, updateUserReadingProgress);
 
 // Writing Question Routes
 
-router.get("/writing/all", protect, isAdmin, getAllWritingQuestions);
+router.get("/writing/all", protect, getAllWritingQuestions);
 router.get("/writing/user/:childId", protect, getWritingQuestions);
 router.post("/writing/progress/:childId", protect, updateUserWritingProgress);
 
