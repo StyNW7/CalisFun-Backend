@@ -9,7 +9,7 @@ const tokenBlacklistSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    expires: "1m",
+    expires: "24m",
   },
 });
 
