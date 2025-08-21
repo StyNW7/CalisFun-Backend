@@ -14,28 +14,19 @@ app.use(express.json());
 
 // CORS configuration
 
-let corsOptions
+let corsOptions;
 
 if (process.env.NODE_ENV === "development") {
-
   corsOptions = {
-    origin: (origin, callback) => {
-      // Jika origin tidak ada (contoh: Postman, curl), izinkan
-      if (!origin) return callback(null, true);
-      return callback(null, true); // Semua origin diizinkan
-    },
+    origin: "*",
     credentials: true,
   };
-
+} else {
+  corsOptions = {
+    credentials: true,
+  };
+  corsOptions.origin = "https://calis-fun.vercel.app";
 }
-
-else {
-    corsOptions = {
-      credentials: true,
-    };
-    corsOptions.origin = "https://calis-fun.vercel.app";
-}
-
 
 app.use(cors(corsOptions));
 

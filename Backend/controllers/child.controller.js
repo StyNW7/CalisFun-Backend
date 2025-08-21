@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import User from "../models/user.model.js";
 import { uploadFileToGridFS } from "../helper/largefile.js";
 
@@ -161,6 +162,39 @@ export const deleteChild = async (req, res) => {
     res.status(200).json({ message: "Child deleted successfully" });
   } catch (error) {
     console.error("Error deleting child:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getAvatarImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid image ID format" });
+    }
+
+    const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+      bucketName: "uploads",
+    });
+
+    const downloadStream = bucket.openDownloadStream(
+      new mongoose.Types.ObjectId(id)
+    );
+
+    downloadStream.on("file", (file) => {
+      res.set("Content-Type", file.contentType);
+    });
+
+    downloadStream.on("error", (err) => {
+      if (err.code === "ENOENT") {
+        return res.status(404).json({ message: "Image not found" });
+      }
+      res.status(500).json({ message: "Error retrieving image" });
+    });
+
+    downloadStream.pipe(res);
+  } catch (error) {
+    console.error("Error in getAvatarImage:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

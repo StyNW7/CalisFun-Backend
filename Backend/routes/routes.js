@@ -20,6 +20,7 @@ import {
   updateChild,
   updateChildStreak,
   deleteChild,
+  getAvatarImage,
 } from "../controllers/child.controller.js";
 import upload from "../middleware/upload.js";
 import {
@@ -46,6 +47,9 @@ import {
 import { chatWithAI } from "../controllers/chatbot.controller.js";
 
 const router = express.Router();
+
+//get image
+router.get("/images/:id", getAvatarImage);
 
 //auth routes
 
