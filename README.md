@@ -36,34 +36,20 @@
 </div>
 
 <div align="center">
-<h4>React | TypeScript | Vite | TailwindCSS | ShadcnUI | Vitest</h4>
+<h4>Node JS | Express JS | MongoDB | JWT | Multer | Vercel | Microsoft Azure</h4>
 </div>
 
 ---
 
-## 🧩 Core Features
+## 🧩 List of APIs
 
-### 🌐 Landing Page & SEO
-- Provides an official information page about the CalisFun app.
-- Serves as a promotional hub to increase app visibility through SEO optimization.
-- Users can read the description, key features, testimonials, and view a preview of the app.
-
-### 📥 APK Download
-- Users can directly download the CalisFun app .apk file through the website.
-- Alternative distribution option besides the Google Play Store/App Store.
-- The download link for the latest version is always available and integrated with release management.
-
-### 🛠️ Admin Dashboard
-- **User Account Management:** Create, edit, deactivate, or delete child and parent accounts.
-- **Question & Content Management:** CRUD practice questions (handwriting, spelling, counting) for the CalisFun app.
-- **Data Analytics:** Displays learning progress data, number of users, daily activity, and app performance statistics.
-- **Role Management:** differentiates admin and moderator access for more controlled security & management.
+[Tolong bang Radit]
 
 ---
 
 ## 🚀 Live Demo
 
-👉 [https://calis-fun.vercel.app](https://calis-fun.vercel.app/)
+👉 [https://calis-fun-backend.vercel.app/](https://calis-fun-backend.vercel.app/)
 
 ---
 
@@ -72,260 +58,279 @@
 ### Repository Structure
 
 ```
-calis-fun-web/
+calis-fun-be/
 ├── .github/                    # GitHub workflows / CI configuration
-├── coverage/                   # Coverage reports (Using Vitest)
-├── Images/                     # Repo-related images (for docs/README)
-├── node_modules/               # Dependencies (auto-generated)
-├── public/                     # Static public assets (favicon, static images, manifest, etc.)
+├── Backend/                    # Main source code
+│   ├── config/                 # Database & environment configuration
+│   ├── controllers/            # Request handlers (business orchestration)
+│   ├── helper/                 # Helper functions (utilities, reusable logic)
+│   ├── middleware/             # Express middlewares (auth, validation, error handling)
+│   ├── models/                 # Database models (MongoDB/Mongoose schemas)
+│   ├── routes/                 # Route definitions and API mapping
+│   ├── seeders/                # Database seed scripts (initial data)
+│   └── tests/                  # Unit & integration tests (Jest + Supertest)
 │
-├── src/                        # Main source code
-│   ├── assets/                 # Images, icons, and static files for UI
-│   ├── components/             # Reusable React components (UI building blocks)
-│   ├── context/                # React context providers (Auth, Theme, Global State)
-│   ├── hooks/                  # Custom React hooks
-│   ├── layouts/                # Layout components (e.g., Admin layout, Landing layout)
-│   ├── lib/                    # Utility libraries (API clients, helpers)
-│   ├── pages/                  # Page-level components (Landing page, Dashboard, etc.)
-│   ├── services/               # API calls & backend integration (Express/MongoDB endpoints)
-│   ├── tests/                  # Unit & integration tests
-│   ├── types/                  # TypeScript types and interfaces
-│   ├── utility/                # Utility functions (formatting, constants, validation)
-│   │
-│   ├── App.tsx                 # Main app component (routing entry point)
-│   ├── index.css               # Global CSS styling
-│   ├── main.tsx                # Entry point for React + Vite
-│   └── vite-env.d.ts           # TypeScript env type definitions
+├── node\_modules/               # Dependencies (auto-generated)
+├── server.js                   # Application entry point (Express server)
 │
 ├── .env                        # Environment variables (local)
-├── .env.sample                 # Sample env file for reference
+├── .env.example                # Sample environment file
+├── .env.test                   # Environment variables for testing
 ├── .gitignore                  # Git ignore rules
-├── components.json             # Config file for shadcn/ui or custom component setup
-├── eslint.config.js            # ESLint rules & configs
-├── index.html                  # Root HTML file (for Vite/React)
+├── babel.config.cjs            # Babel configuration
+├── jest.config.cjs             # Jest testing configuration
 ├── package.json                # Project metadata & dependencies
-├── package-lock.json           # Locked dependency 
-├── README.md                   # Repository Documentation
-├── tailwind.config.js          # Tailwind Configuration
-├── vercel.json                 # Vercel Config for Deployment
-├── vite.config.ts              # Vite Configuration
+├── package-lock.json           # Locked dependency tree
+├── README.md                   # Repository documentation
+└── vercel.json                 # Vercel deployment configuration
 ```
-
 
 ### **Architecture Principles**
 
-The architecture for the **CalisFun Web Frontend** follows a **Layered Architecture** with emphasis on **scalability, reusability, and maintainability**.
+The architecture for the **CalisFun Backend** follows a **Layered MVC Architecture**, designed for **clarity, scalability, and testability**.
 
 1. **Layered Architecture Pattern**
+   - **Presentation Layer (API Layer):**  
+     `routes/` + `middleware/`  
+     Defines all API endpoints and request/response handling. Middleware secures routes (JWT, validation, error handling).
+   
+   - **Application Layer (Controllers):**  
+     `controllers/`  
+     Orchestrates business logic, connects services, and prepares responses for clients.
+   
+   - **Domain Layer (Business & Models):**  
+     `models/` + `helper/`  
+     Contains the data schema (MongoDB via Mongoose) and domain logic (validation, utilities).
+   
+   - **Infrastructure Layer (Config & Persistence):**  
+     `config/` + `seeders/`  
+     Handles database connection, environment setup, and initial dataset seeding.
 
-    * Presentation Layer (UI): components, layouts, and pages folder
-    * Application Layer (State & Orchestration Layer): context and hooks folder
-    * Domain Layer (Business): services, utility, and lib folder
-    * Infrastructure Layer: types, tests, public, assets folder
-
-2. **Component-First**
-
-   * `components/` holds reusable UI building blocks (buttons, cards, forms).
-   * `layouts/` defines page skeletons (Landing, Dashboard).
-   * `pages/` contain high-level views that orchestrate components.
+2. **Model–View–Controller (MVC) Principles**
+   - **Model:** Represents the database schema and rules (`models/`).  
+   - **Controller:** Encapsulates business logic and response handling (`controllers/`).  
+   - **View:** Instead of HTML views, the backend serves **JSON responses** as the "view" layer for the mobile/web frontend.
 
 3. **Separation of Concerns**
-
-   * `services/` → communication layer for backend API.
-   * `context/` → global state & role-based access (parent, child, admin).
-   * `hooks/` → encapsulate reusable logic for cleaner components.
-   * `utility/` → shared utilities (formatting, constants, validation).
+   - **`routes/`** → Handles endpoint mapping.  
+   - **`controllers/`** → Business logic orchestration.  
+   - **`models/`** → Data definition and persistence.  
+   - **`middleware/`** → Security, validation, and error control.  
+   - **`helper/`** → Utility functions reused across layers.  
 
 4. **Scalability in Mind**
+   - Organized in modular domains → easy to add new features (e.g., new quiz type, new role).  
+   - `tests/` ensures new changes don’t break existing functionality.  
+   - CI/CD integrated with GitHub Actions and Vercel for automatic deployments.
 
-   * `types/` → enforce strong typing with TypeScript.
-   * `tests/` → ensure testability with Jest/Vitest.
-   * `assets/` → central location for images/icons for consistency.
-
-5. **Vite + React + TS Setup**
-
-   * `main.tsx` → bootstraps React.
-   * `App.tsx` → app-wide routing & layout injection.
-   * Integrated with **shadcn/ui** + **TailwindCSS** for clean and modern UI.
-
+5. **Express.js + MongoDB Stack**
+   - `server.js` initializes Express app and applies routes/middlewares.  
+   - `Mongoose` provides ODM for MongoDB with schema validation.  
+   - `Jest + Supertest` ensure testability of routes, controllers, and middleware.  
 
 ---
 
 
 ## 🎨 Design Pattern
 
-The CalisFun Web Frontend applies common **software design patterns** (Creational, Structural, and Behavioral) to ensure scalability and maintainability:
-
 ### 🔨 Creational Patterns
 - **Singleton Pattern**  
-  - Applied in global contexts (e.g., `AuthContext`) to ensure only **one instance** of state is shared across the app.  
-  - Guarantees consistent authentication state 
+  - Applied in database connection (`config/database.js`) to ensure only **one instance** of the MongoDB connection is created and reused.  
+  - Prevents multiple connections and improves performance.  
 
 - **Factory Pattern**  
-  - Used in UI component generation (e.g., dynamic form fields, button variants via `shadcn/ui`).  
-  - Enables creating multiple styled components from a single factory function.  
-
----
+  - Used in `models/` where Mongoose schemas generate model instances (e.g., `User`, `Quiz`, `Progress`).  
+  - Ensures consistent creation of objects that interact with MongoDB.  
 
 ### 🏗️ Structural Patterns
 - **Module Pattern**  
-  - Each feature is modularized (`/services`, `/hooks`, `/pages`) for better separation of concerns.  
-  - Improves scalability when new modules (e.g., new quiz type) are introduced.  
+  - Code is organized into self-contained modules (`controllers/`, `routes/`, `middleware/`, `helper/`).  
+  - Each module handles a single responsibility and can be extended independently.  
 
 - **Facade Pattern**  
-  - `services/` layer acts as a simplified interface for complex backend/AI API calls.  
-  - Hides low-level HTTP details and provides clean functions like `loginUser()`, `fetchLeaderboard()`.  
+  - `controllers/` act as a facade between incoming HTTP requests and deeper logic (models, services).  
+  - Provides a simplified API to the routes layer, hiding database or service complexity.  
 
----
+- **Proxy Pattern**  
+  - Implemented in middleware (e.g., `authMiddleware`) to intercept and validate requests before reaching controllers.  
+  - Adds security and logging behavior transparently.  
 
 ### 🤝 Behavioral Patterns
 - **Observer Pattern**  
-  - React’s state and context system naturally implement the observer pattern: when state changes, subscribed components automatically update.
+  - Database models can trigger hooks/events (e.g., Mongoose pre/post save hooks).  
+  - Useful for audit logging, notifications, or cascading updates.  
+
+- **Strategy Pattern**  
+  - Authentication strategies (JWT, role-based access control) are encapsulated, allowing flexible extension (e.g., adding OAuth in the future).  
 
 - **Command Pattern**  
-  - User interactions (button clicks, form submissions) are encapsulated as discrete actions handled by event handlers.  
-  - Decouples UI elements from the logic execution.  
+  - User actions (e.g., register, login, submit answer) are processed as commands via controllers.  
+  - Decouples the request handling from the execution logic.  
 
-- **Mediator Pattern**  
-  - The `context/` provider acts as mediator between unrelated components (e.g., AdminDashboard ↔ UserProfile), reducing direct dependencies.  
+- **Middleware Chain (Chain of Responsibility Pattern)**  
+  - Express middlewares (auth, validation, error handler) form a **chain of responsibility**.  
+  - Each middleware decides whether to handle the request or pass it to the next one.  
 
-By combining these **Creational, Structural, and Behavioral** patterns, the frontend architecture remains **modular, testable, and extensible**, while ensuring smooth collaboration between UI components, business logic, and backend APIs.
+---
+
+By combining these **Creational, Structural, and Behavioral** patterns, the backend architecture ensures:  
+- **Consistency** in data handling (via Factory & Singleton).  
+- **Separation of concerns** (via Module & Facade).  
+- **Security and flexibility** (via Proxy, Strategy, Middleware chain).  
+- **Extensibility** for future features (additional authentication methods, new services).  
 
 ---
 
 ## 🧼 Clean Code Principles
 
-To ensure maintainability and readability, we enforce **Clean Code Principles**:
+To ensure maintainability, scalability, and readability, the **CalisFun Backend** follows Clean Code practices:
 
 - **Naming Conventions**  
-  - Variables, functions, and components use clear, descriptive names.  
-  - Follows **camelCase** for variables/functions and **PascalCase** for React components.  
+  - Follows **camelCase** for variables & functions, **PascalCase** for models, and **UPPER_CASE** for constants/environment variables.  
+  - Example: `userController.js`, `authMiddleware.js`, `UserModel`.  
 
-- **Small & Focused Components**  
-  - Each component does **one thing well**.  
-  - Large pages are broken down into smaller, reusable UI blocks.  
+- **Small & Focused Modules**  
+  - Each folder (controllers, routes, middleware, models) has a **single responsibility**.  
+  - Example: `authController` only handles login/register, `quizController` only manages quiz-related endpoints.  
 
-- **Consistent Styling**  
-  - Unified design system via **TailwindCSS** + `shadcn/ui`.  
-  - Global styles are minimized; utility classes ensure consistency.  
+- **Consistent Project Structure**  
+  - Organized in layered MVC pattern: `routes → controllers → models → database`.  
+  - Utilities/helpers are isolated in `/helper` to avoid duplication.  
 
 - **Linting & Formatting**  
-  - Enforced with **ESLint** and **Prettier** to maintain consistent code style.  
-  - CI/CD pipeline blocks PRs if linting/tests fail.  
+  - Enforced with **ESLint** and **Prettier** for consistent code style.  
+  - GitHub Actions block merges if linting/tests fail.  
 
-- **Type Safety**  
-  - Strongly typed with **TypeScript**.  
-  - All shared contracts/interfaces live under `/src/types/`.  
+- **Error Handling**  
+  - Centralized error handling in `middleware/errorHandler.js`.  
+  - Ensures all errors return consistent JSON responses.  
 
 - **Testing**  
-  - Unit and integration tests in `/src/tests/`.  
-  - Ensures critical features (auth, forms, dashboard) are always reliable.  
+  - Unit and integration tests live in `/tests` (Jest + Supertest).  
+  - Covers critical flows like authentication, CRUD operations, and role-based access.  
 
 - **Separation of Concerns**  
-  - Logic (hooks, services) is decoupled from UI (components).  
-  - Pages orchestrate multiple components instead of holding business logic.  
+  - `routes/` define endpoints only.  
+  - `controllers/` orchestrate business logic.  
+  - `models/` manage data schema & persistence.  
+  - `middleware/` add reusable cross-cutting concerns (auth, validation).  
 
 ---
 
-## 🔒 Security
+## 🔒 Security Implementation
 
-The CalisFun Web Frontend implements multiple security measures to ensure safe usage:
+The **CalisFun Backend** implements multiple security mechanisms to protect data and users:
 
 - **JWT Authentication**  
-  - All API requests to backend services are authenticated using **JSON Web Tokens (JWT)**.  
+  - All protected routes require a valid **JSON Web Token (JWT)**.  
+  - Tokens are signed with a secret key stored in environment variables.  
 
 - **Role-Based Access Control (RBAC)**  
-  - Different roles (Guest User and Admin) have limited access.  
-  - Admin Dashboard is protected by strict role verification and server-side validation.    
+  - Roles like **Admin** and **User** are enforced.  
+  - Example: Only Admin can manage questions, while Users can only access their own progress.  
+
+- **Input Validation & Sanitization**  
+  - Requests are validated with middleware to prevent malformed data.  
+  - Prevents SQL/NoSQL injections and invalid payloads.  
 
 - **Secure Communication**  
-  - All requests are sent over **HTTPS**.  
-  - API keys and secrets are not hardcoded but injected via **environment variables**.  
+  - All API endpoints are served via **HTTPS** (handled at deployment level with Vercel/Reverse Proxy).  
+  - Secrets (DB URI, JWT_SECRET, API Keys) are injected from `.env`, never hardcoded.  
 
-- **Additional Frontend Security**  
-  - ESLint + TypeScript to catch potential unsafe code.  
-  - Regular dependency audit (`npm audit`) to identify vulnerabilities.  
+- **Error & Logging Security**  
+  - Centralized error handler avoids leaking sensitive stack traces in production.  
+  - Logs only necessary details for debugging.  
+
+- **Middleware Security**  
+  - Authentication middleware ensures only authorized requests reach controllers.  
+  - Rate limiting and CORS can be configured for extra protection.  
+
+- **Dependency & Vulnerability Checks**  
+  - Regular `npm audit` to detect vulnerable packages.  
+  - Dependabot/GitHub Actions notify when upgrades are required.  
 
 ---
+
 
 ## 📝 CI/CD
 
-The CI/CD pipeline for CalisFun Web Frontend is designed to ensure **automation, reliability, and fast iteration**:
+The CI/CD pipeline for **CalisFun Backend** is designed to ensure **automation, code quality, and reliable deployment**:
 
 - **GitHub Actions (Workflows)**  
-  - Runs automated tests (unit + integration) on every `pull request` and `main` branch push.  
-  - Performs **linting & build check** to ensure code quality.  
-  - Generates coverage reports under `/coverage`.  
+  - Runs **unit + integration tests** with **Jest + Supertest** on every `pull request` and `main` branch push.   
+  - Generates **test coverage reports** under `/tests/coverage`.  
 
 - **Vercel Deployment**  
-  - Integrated with **Vercel** for seamless frontend hosting.  
-  - Every push to `main` branch triggers an automatic deployment to production.  
-  - Preview deployments are generated for every pull request → allows QA & stakeholder review before merging.  
+  - Integrated with **Vercel** for backend hosting.  
+  - Every push to the `main` branch triggers an **automatic build & deployment** to production.  
+  - Preview deployments are created for each pull request → enabling QA and developer review before merging.  
 
 **CI/CD Flow:**  
-1. Developer pushes code → GitHub Actions runs tests & checks.  
-2. Vercel automatically builds & deploys latest version.  
-3. Production site is updated instantly with zero-downtime deployment.  
-
+1. Developer pushes code → GitHub Actions runs linting + tests.  
+2. If pipeline passes, Vercel automatically deploys the latest version.  
+3. Production API is updated instantly with **zero-downtime deployment**.  
 
 ---
 
 ## 🧪 Test Coverage
 
-
-The CalisFun Web Frontend applies a **multi-layered testing strategy** to ensure reliability and maintainability.
+The **CalisFun Backend** follows a **multi-layered testing strategy** to ensure stable APIs and reliable data handling.
 
 ### 🔍 Testing Scope
 - **Unit Tests**  
-  - For reusable components (buttons, forms, inputs).  
-  - For hooks and utility functions.  
+  - For helper functions and utility modules (e.g., password hashing, JWT generation).  
+  - For isolated controllers logic (register, login, CRUD operations).  
 
 - **Integration Tests**  
-  - Validating data flow between components and services.  
-  - Example: Login → AuthContext → API service → UI update.  
+  - Using **Supertest** to validate API endpoints.  
+  - Example flows tested:  
+    - User Registration → Login → Authenticated Request (JWT)  
+    - Admin → Create Question → Fetch Question → Update/Delete Question  
 
 - **End-to-End (E2E) Tests**
-  - Simulating real user flows such as:
-    - Admin Login -> Manage User -> Manage Question -> CRU Question
+  - Simulated flows combining multiple layers (e.g., Full User Lifecycle: Register → Play Quiz → Progress Saved → Leaderboard Updated).  
 
 ---
 
 ### 🧪 Testing Tools
-- **Vitest** → Unit & integration tests.  
-- **React Testing Library** → Component rendering and user interaction tests.  
+- **Jest** → For unit & integration tests.  
+- **Supertest** → To test HTTP API endpoints.  
+- **MongoDB Memory Server** → For running tests against an in-memory MongoDB instance (fast, isolated, no need for real DB).  
 
 ---
 
 ### 📊 Coverage Metrics
-The test coverage reports are generated automatically under the `/coverage` folder.  
-Metrics tracked:
+Test coverage reports are generated automatically under `/tests/coverage`.  
+Metrics tracked:  
 - **Statements** → Percentage of code statements executed.  
-- **Branches** → Conditional branches covered.  
-- **Functions** → Functions invoked during tests.  
+- **Branches** → Conditional branches tested.  
+- **Functions** → Functions invoked during test runs.  
 - **Lines** → Executed lines vs total lines.  
 
-We already succedd to passed some of unit tests such as button test, shadcnui library test, navbar test, and etc. We also already manually tested our website and from user perspective we can know better about CalisFun and download the app. From the admin perspective we can manage users and questions for CalisFun.
+We already passed several tests such as:  
+- Authentication Flow (Register, Login, JWT Verification)  
+- User Role Access (Admin vs User)  
+- Question Management API (CRUD operations)  
+- Error Handling (Invalid payloads, unauthorized access)  
 
-<img src="./Images/test_coverage.png" height="210"/>
-
----
-
-## 🤵 Admin Account
-
-For testing, you can access the admin account credential
-
-Open this Link: <a href="https://calis-fun.vercel.app/admin-login">Admin Login Page</a>
-
-Email: admin@gmail.com
-Password: admin
+<img src="./Images/backend_test_coverage.png" height="210"/>
 
 ---
 
 ## 🔐 .env Configuration
 
-.env for the AI
+.env for the Backend
 ```
-VITE_API_BASE_URL=http://localhost:3000/api
+MONGO_URI=<mongo_db_url/>
+JWT_SECRET=
+PORT=3000
+NODE_ENV=development
+FRONTEND_URL=http://localhost:5173
+
+AZURE_OPENAI_KEY=<azure_open_ai_key_subscription/>
+AZURE_OPENAI_ENDPOINT=<azure_open_ai_endpoint/>
+AZURE_API_VERSION=2024-12-01-preview
+AZURE_OPENAI_DEPLOYMENT=gpt-35-turbo
 ```
 
 You can also copy the .env.sample then rename it to .env
@@ -336,66 +341,40 @@ You can also copy the .env.sample then rename it to .env
 
 ### Prerequisites
 - **Node.js** (v16+)
+- **MongoDB**
 - **Git**
+- **MongoDB Compass** (optional)
+- **Postman** (optional)
 
 ### Clone the Project
 ```bash
-git clone https://github.com/best-team-compfest17/CalisFun-Web.git
-cd CalisFun-Web
+git clone https://github.com/best-team-compfest17/CalisFun-Backend.git
+cd CalisFun-Backend
+cd Backend
 npm install
-npm run dev # Run the local server
-npm run test # Run vitest test
-npm run test --coverage # Make the test coverage report
+npm run seed:all  # Seeding the database
+npm run dev       # Run the local server
+npm run test      # Run jest test
 ```
 
 ---
 
-## 📸 &nbsp;Website Preview
-<table style="width:100%; text-align:center">
-    <col width="100%">
-    <tr>
-        <td width="1%" align="center"><img height="370" src="./Images/Preview/home.png"/></td>
-    </tr>
-    <tr>
-        <td width="1%" align="center">Home Page</td>
-    </tr>
-    <tr>
-        <td width="1%" align="center"><img height="400" src="./Images/Preview/features.png"/></td>
-    </tr>
-    <tr>
-        <td width="1%" align="center">Features Page</td>
-    </tr>
-    <tr>
-        <td width="1%" align="center"><img height="400" src="./Images/Preview/sample-feature.png"/></td>
-    </tr>
-    <tr>
-        <td width="1%" align="center">Sample Feature Page</td>
-    </tr>
-    <tr>
-        <td width="1%" align="center"><img height="400" src="./Images/Preview/download.png"/></td>
-    </tr>
-    <tr>
-        <td width="1%" align="center">Download Page</td>
-    </tr>
-    <tr>
-        <td width="1%" align="center"><img height="400" src="./Images/Preview/admin-overview.png"/></td>
-    </tr>
-    <tr>
-        <td width="1%" align="center">Admin Overview Dashboard Page</td>
-    </tr>
-    <tr>
-        <td width="1%" align="center"><img height="400" src="./Images/Preview/admin-manage-user.png"/></td>
-    </tr>
-    <tr>
-        <td width="1%" align="center">Admin Manage User Dashboard Page</td>
-    </tr>
-    <tr>
-        <td width="1%" align="center"><img height="400" src="./Images/Preview/admin-manage-question.png"/></td>
-    </tr>
-    <tr>
-        <td width="1%" align="center">Admin Manage Question Page</td>
-    </tr>
-</table>
+## 🧭 Diagram
+
+*Overall Database System Flow:*
+<p align="center">
+  <img src="./Images/diagram.png" width="700">
+</p>
+
+This diagram shows how the models connected using ERD Diagram
+
+---
+
+## 🔥 API Documentation
+
+Postman Link:
+
+[CalisFun Backend Postman](https://app.getpostman.com/join-team?invite_code=e7dd52085df5b11f72bad1da0e022ed6fa6f9438b0444aaae1468d66de5cf840&target_code=26db97613300939b2f3574d983144d7a )
 
 ---
 
