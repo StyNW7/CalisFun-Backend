@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import TokenBlacklist from "../models/tokenblacklist.model.js";
 import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
@@ -92,6 +93,22 @@ export const changePassword = async (req, res) => {
   }
 };
 
-export const logoutUser = (req, res) => {
-  res.status(200).json({ message: "Logged out successfully" });
+export const logoutUser = async (req, res) => {
+  try {
+    const authHeader = req.header("Authorization");
+    if (!authHeader) {
+      return res.status(400).json({ message: "No token provided." });
+    }
+    const token = authHeader.replace("Bearer ", "");
+    const blacklistedToken = new TokenBlacklist({ token });
+    await blacklistedToken.save();
+
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(200).json({ message: "Token already blacklisted." });
+    }
+    console.error(error);
+    res.status(500).json({ message: "Server error." });
+  }
 };
