@@ -18,7 +18,11 @@ let corsOptions;
 
 if (process.env.NODE_ENV === "development") {
   corsOptions = {
-    origin: "*",
+    origin: (origin, callback) => {
+      // Jika origin tidak ada (contoh: Postman, curl), izinkan
+      if (!origin) return callback(null, true);
+      return callback(null, true); // Semua origin diizinkan
+    },
     credentials: true,
   };
 } else {
