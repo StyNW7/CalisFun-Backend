@@ -130,7 +130,6 @@ The architecture for the **CalisFun Backend** follows a **Layered MVC Architectu
 
 ---
 
-
 ## 🎨 Design Pattern
 
 ### 🔨 Creational Patterns
@@ -170,14 +169,6 @@ The architecture for the **CalisFun Backend** follows a **Layered MVC Architectu
 - **Middleware Chain (Chain of Responsibility Pattern)**  
   - Express middlewares (auth, validation, error handler) form a **chain of responsibility**.  
   - Each middleware decides whether to handle the request or pass it to the next one.  
-
----
-
-By combining these **Creational, Structural, and Behavioral** patterns, the backend architecture ensures:  
-- **Consistency** in data handling (via Factory & Singleton).  
-- **Separation of concerns** (via Module & Facade).  
-- **Security and flexibility** (via Proxy, Strategy, Middleware chain).  
-- **Extensibility** for future features (additional authentication methods, new services).  
 
 ---
 
