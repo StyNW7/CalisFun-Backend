@@ -72,9 +72,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: "parent",
   },
-  passKey: {
+  pass_key: {
     type: Number,
     required: true,
+    length: 4,
   },
   children: [childSchema],
 });
