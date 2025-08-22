@@ -397,6 +397,7 @@ Code coverage reports are automatically generated after each test run to provide
 - **Controllers**: in progress → focus on error-handling scenarios & edge cases  
 
 We are continuously working to improve these metrics, with the primary goal of achieving more robust coverage in all layers.
+
 <img width="531" height="142" alt="image" src="https://github.com/user-attachments/assets/eaf17aa0-3eba-43cf-822d-dfd17c9eb2c1" />
 
 ---
