@@ -74,7 +74,7 @@ const userSchema = new mongoose.Schema({
   },
   pass_key: {
     type: Number,
-    required: true,
+    // required: true,
     length: 4,
   },
   children: [childSchema],
