@@ -15,6 +15,39 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
+export const editUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { username, email, phone_number, password } = req.body;
+
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.phone_number = phone_number || user.phone_number;
+    if (password) {
+      user.password = password;
+    }
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      message: "User profile updated successfully",
+      user: {
+        id: updatedUser._id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        phone_number: updatedUser.phone_number,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");

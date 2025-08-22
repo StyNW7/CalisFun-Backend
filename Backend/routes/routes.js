@@ -9,6 +9,7 @@ import {
   getUserProfile,
   getAllUsers,
   getLeaderboard,
+  editUserProfile,
 } from "../controllers/user.controller.js";
 import { protect } from "../middleware/protect.js";
 import { isAdmin } from "../middleware/admin.js";
@@ -62,6 +63,7 @@ router.post("/auth/logout", protect, logoutUser);
 
 router.get("/user/profile", protect, getUserProfile);
 router.get("/leaderboard", protect, getLeaderboard);
+router.put("/user/profile/edit", protect, editUserProfile);
 
 //counting routes
 
