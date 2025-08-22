@@ -43,9 +43,107 @@
 
 ## 🧩 List of APIs
 
-[Tolong bang Radit]
+### Authentication
+<details>
+<summary>Lihat Endpoint</summary>
+
+- **POST** `/auth/register` → Mendaftarkan pengguna baru _(Publik)_  
+- **POST** `/auth/login` → Login untuk mendapatkan JWT _(Publik)_  
+- **PUT** `/auth/change-password/:id` → Mengubah password pengguna _(Terotentikasi)_  
+- **POST** `/auth/logout` → Logout dan memasukkan token ke blacklist _(Terotentikasi)_  
+
+</details>
 
 ---
+
+### User
+<details>
+<summary>Lihat Endpoint</summary>
+
+- **GET** `/user/profile` → Mendapatkan profil pengguna yang sedang login _(Terotentikasi)_  
+- **GET** `/leaderboard` → Mendapatkan data leaderboard _(Terotentikasi)_  
+
+</details>
+
+---
+
+### Child Management
+<details>
+<summary>Lihat Endpoint</summary>
+
+- **POST** `/children/create` → Membuat profil anak baru (termasuk unggah avatar) _(Terotentikasi)_  
+- **GET** `/children/all` → Mendapatkan semua profil anak milik pengguna _(Terotentikasi)_  
+- **GET** `/children/one/:childId` → Mendapatkan detail satu profil anak _(Terotentikasi)_  
+- **PUT** `/children/update/:childId` → Memperbarui profil anak (termasuk unggah avatar) _(Terotentikasi)_  
+- **PUT** `/children/streak/:childId` → Memperbarui streak harian anak _(Terotentikasi)_  
+- **DELETE** `/children/delete/:childId` → Menghapus profil anak _(Terotentikasi)_  
+- **PUT** `/children/counting-difficulty/:childId` → Memperbarui tingkat kesulitan berhitung _(Terotentikasi)_  
+- **GET** `/images/:id` → Mendapatkan gambar avatar _(Publik)_  
+
+</details>
+
+---
+
+### Reading & Writing Questions
+<details>
+<summary>Lihat Endpoint</summary>
+
+- **GET** `/reading/all` → Mendapatkan semua soal membaca _(Terotentikasi)_  
+- **GET** `/reading/user/:childId` → Mendapatkan soal membaca sesuai progres anak _(Terotentikasi)_  
+- **POST** `/reading/progress/:childId` → Memperbarui progres membaca anak _(Terotentikasi)_  
+
+- **GET** `/writing/all` → Mendapatkan semua soal menulis _(Terotentikasi)_  
+- **GET** `/writing/user/:childId` → Mendapatkan soal menulis sesuai progres anak _(Terotentikasi)_  
+- **POST** `/writing/progress/:childId` → Memperbarui progres menulis anak _(Terotentikasi)_  
+
+</details>
+
+---
+
+### Chatbot & Statistics
+<details>
+<summary>Lihat Endpoint</summary>
+
+- **POST** `/chat` → Mengirim pesan ke AI Chatbot _(Publik)_  
+- **GET** `/children/stats/:childId` → Mendapatkan statistik progres anak _(Terotentikasi)_  
+- **GET** `/questions/stats` → Mendapatkan statistik jumlah soal _(Admin)_  
+
+</details>
+
+---
+
+### Admin Only
+<details>
+<summary>Lihat Endpoint</summary>
+
+- **GET** `/users/all` → Mendapatkan semua data pengguna _(Admin)_  
+
+**Reading CRUD:**  
+- **POST** `/reading/create`  
+- **PUT** `/reading/update/:id`  
+- **DELETE** `/reading/delete/:id`  
+Operasi CRUD soal membaca _(Admin)_  
+
+**Writing CRUD:**  
+- **POST** `/writing/create`  
+- **PUT** `/writing/update/:id`  
+- **DELETE** `/writing/delete/:id`  
+Operasi CRUD soal menulis _(Admin)_  
+
+</details>
+
+---
+
+## 🛡️ Autentikasi
+- Gunakan **Bearer Token (JWT)** pada `Authorization Header` untuk semua endpoint yang membutuhkan autentikasi.
+- Format: Authorization: Bearer <your_token>
+
+---
+
+## 📌 Catatan
+- **Publik** → bisa diakses tanpa login.  
+- **Terotentikasi** → membutuhkan login (JWT).  
+- **Admin** → hanya bisa diakses oleh user dengan role `admin`.  
 
 ## 🚀 Live Demo
 
@@ -157,13 +255,6 @@ The architecture for the **CalisFun Backend** follows a **Layered MVC Architectu
 
 ### 🤝 Behavioral Patterns
 
-- **Strategy Pattern**  
-  - Authentication strategies (JWT, role-based access control) are encapsulated, allowing flexible extension (e.g., adding OAuth in the future).  
-
-- **Command Pattern**  
-  - User actions (e.g., register, login, submit answer) are processed as commands via controllers.  
-  - Decouples the request handling from the execution logic.  
-
 - **Middleware Chain (Chain of Responsibility Pattern)**  
   - Express middlewares (auth, validation) form a **chain of responsibility**.  
   - Each middleware decides whether to handle the request or pass it to the next one.  
@@ -188,7 +279,6 @@ To ensure maintainability, scalability, and readability, the **CalisFun Backend*
 
 - **Linting & Formatting**  
   - Enforced with **ESLint** and **Prettier** for consistent code style.  
-  - GitHub Actions block merges if linting/tests fail.  
 
 - **Error Handling**  
   - Ensures all errors return consistent JSON responses.  
@@ -218,7 +308,6 @@ The **CalisFun Backend** implements multiple security mechanisms to protect data
   - Example: Only Admin can manage questions, while Users can only access their own progress.  
 
 - **Input Validation & Sanitization**  
-  - Requests are validated with middleware to prevent malformed data.  
   - Prevents SQL/NoSQL injections and invalid payloads.  
 
 - **Secure Communication**  
@@ -226,7 +315,6 @@ The **CalisFun Backend** implements multiple security mechanisms to protect data
   - Secrets (DB URI, JWT_SECRET, API Keys) are injected from `.env`, never hardcoded.  
 
 - **Error & Logging Security**  
-  - Centralized error handler avoids leaking sensitive stack traces in production.  
   - Logs only necessary details for debugging.  
 
 - **Middleware Security**  
@@ -234,8 +322,7 @@ The **CalisFun Backend** implements multiple security mechanisms to protect data
   - Rate limiting and CORS can be configured for extra protection.  
 
 - **Dependency & Vulnerability Checks**  
-  - Regular `npm audit` to detect vulnerable packages.  
-  - Dependabot/GitHub Actions notify when upgrades are required.  
+  - Regular `npm audit` to detect vulnerable packages.    
 
 ---
 
@@ -245,8 +332,8 @@ The **CalisFun Backend** implements multiple security mechanisms to protect data
 The CI/CD pipeline for **CalisFun Backend** is designed to ensure **automation, code quality, and reliable deployment**:
 
 - **GitHub Actions (Workflows)**  
-  - Runs **unit + integration tests** with **Jest + Supertest** on every `pull request` and `main` branch push.   
-  - Generates **test coverage reports** under `/tests/coverage`.  
+  - Runs **unit + integration tests** with **Jest + Supertest** on every `main` branch push.   
+  - Generates **test coverage reports** under `the root /coverage directory`.  
 
 - **Vercel Deployment**  
   - Integrated with **Vercel** for backend hosting.  
@@ -254,7 +341,7 @@ The CI/CD pipeline for **CalisFun Backend** is designed to ensure **automation, 
   - Preview deployments are created for each pull request → enabling QA and developer review before merging.  
 
 **CI/CD Flow:**  
-1. Developer pushes code → GitHub Actions runs linting + tests.  
+1. Developer pushes code → GitHub Actions runs tests.  
 2. If pipeline passes, Vercel automatically deploys the latest version.  
 3. Production API is updated instantly with **zero-downtime deployment**.  
 
@@ -288,7 +375,7 @@ The **CalisFun Backend** follows a **multi-layered testing strategy** to ensure 
 ---
 
 ### 📊 Coverage Metrics
-Test coverage reports are generated automatically under `/tests/coverage`.  
+Test coverage reports are generated automatically under `the root /coverage directory`.  
 Metrics tracked:  
 - **Statements** → Percentage of code statements executed.  
 - **Branches** → Conditional branches tested.  
