@@ -60,18 +60,18 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        working-directory: ./Backend
+        working-directory: .
         run: npm install
 
       - name: Build
-        working-directory: ./Backend
+        working-directory: .
         run: npm run build --if-present
 
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
       - name: Deploy to Vercel
-        working-directory: ./Backend
+        working-directory: .
         run: npx vercel --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
