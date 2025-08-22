@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
   try {
-    const { username, email, phone_number, password, role, pass_key } =
+    const { username, email, phone_number, password, role } =
       req.body;
 
     if (
@@ -12,8 +12,7 @@ export const registerUser = async (req, res) => {
       !email ||
       !phone_number ||
       !password ||
-      !role ||
-      !pass_key
+      !role
     ) {
       return res
         .status(400)
@@ -32,8 +31,7 @@ export const registerUser = async (req, res) => {
       email,
       phone_number,
       password,
-      role: "parent",
-      pass_key,
+      role: "parent"
     });
 
     await newUser.save();
@@ -44,8 +42,7 @@ export const registerUser = async (req, res) => {
         username: newUser.username,
         email: newUser.email,
         phone_number: newUser.phone_number,
-        role: newUser.role,
-        pass_key: newUser.pass_key,
+        role: newUser.role
       },
     });
   } catch (error) {
