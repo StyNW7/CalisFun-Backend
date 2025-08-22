@@ -5,7 +5,7 @@ export const seedReading = async () => {
     
     { word: "kucing", category: "word", level: 1 },
     { word: "anjing", category: "word", level: 2 },
-    { word: "buku", category: "word", level: 3 },
+    { word: "buku", category: "word", level: 3 }, 
     { word: "meja", category: "word", level: 4 },
     
     { word: "komputer", category: "word", level: 5 },
