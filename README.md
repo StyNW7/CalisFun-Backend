@@ -449,7 +449,7 @@ This diagram shows how the models connected using ERD Diagram
 
 Postman Link:
 
-[CalisFun Backend Postman](https://app.getpostman.com/join-team?invite_code=e7dd52085df5b11f72bad1da0e022ed6fa6f9438b0444aaae1468d66de5cf840&target_code=26db97613300939b2f3574d983144d7a )
+[CalisFun Backend Postman](https://documenter.getpostman.com/view/38889792/2sB3BLj84B)
 
 ---
 
