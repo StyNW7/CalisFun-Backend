@@ -4,10 +4,20 @@ module.exports = {
   testPathIgnorePatterns: ["/node_modules/"],
   collectCoverage: true,
   collectCoverageFrom: [
-    "**/*.{js,cjs}",
+    "controllers/auth.controller.js",
+    "controllers/child.controller.js",
+    "controllers/reading.controller.js",
+    "middleware/protect.js",
+    "models/**/*.js",
+    "routes/routes.js",
+
+    "!**/*.{cjs}",
     "!**/node_modules/**",
-    "!**/vendor/**",
     "!**/tests/**",
     "!jest.config.cjs",
+    "!server.js",
+    "!**/seeders/**",
+    "!**/helper/**",
+    "!**/coverage/**",
   ],
 };
