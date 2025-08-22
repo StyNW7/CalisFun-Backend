@@ -70,7 +70,8 @@ calis-fun-be/
 │   ├── seeders/                # Database seed scripts (initial data)
 │   └── tests/                  # Unit & integration tests (Jest + Supertest)
 │
-├── node\_modules/               # Dependencies (auto-generated)
+├── node\_modules/              # Dependencies (auto-generated)
+├── coverage/                   # Coverage (auto-generated)
 ├── server.js                   # Application entry point (Express server)
 │
 ├── .env                        # Environment variables (local)
@@ -134,7 +135,7 @@ The architecture for the **CalisFun Backend** follows a **Layered MVC Architectu
 
 ### 🔨 Creational Patterns
 - **Singleton Pattern**  
-  - Applied in database connection (`config/database.js`) to ensure only **one instance** of the MongoDB connection is created and reused.  
+  - Applied in database connection (`config/db.js`) to ensure only **one instance** of the MongoDB connection is created and reused.  
   - Prevents multiple connections and improves performance.  
 
 - **Factory Pattern**  
@@ -155,9 +156,6 @@ The architecture for the **CalisFun Backend** follows a **Layered MVC Architectu
   - Adds security and logging behavior transparently.  
 
 ### 🤝 Behavioral Patterns
-- **Observer Pattern**  
-  - Database models can trigger hooks/events (e.g., Mongoose pre/post save hooks).  
-  - Useful for audit logging, notifications, or cascading updates.  
 
 - **Strategy Pattern**  
   - Authentication strategies (JWT, role-based access control) are encapsulated, allowing flexible extension (e.g., adding OAuth in the future).  
@@ -167,7 +165,7 @@ The architecture for the **CalisFun Backend** follows a **Layered MVC Architectu
   - Decouples the request handling from the execution logic.  
 
 - **Middleware Chain (Chain of Responsibility Pattern)**  
-  - Express middlewares (auth, validation, error handler) form a **chain of responsibility**.  
+  - Express middlewares (auth, validation) form a **chain of responsibility**.  
   - Each middleware decides whether to handle the request or pass it to the next one.  
 
 ---
@@ -193,7 +191,6 @@ To ensure maintainability, scalability, and readability, the **CalisFun Backend*
   - GitHub Actions block merges if linting/tests fail.  
 
 - **Error Handling**  
-  - Centralized error handling in `middleware/errorHandler.js`.  
   - Ensures all errors return consistent JSON responses.  
 
 - **Testing**  
