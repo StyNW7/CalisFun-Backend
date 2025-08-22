@@ -1,10 +1,10 @@
 import request from "supertest";
 import express from "express";
-import router from "../routes/routes.js";
-import "./setup.js";
-import User from "../models/user.model.js";
-import ReadingQuestion from "../models/reading.model.js";
-import WritingQuestion from "../models/writing.model.js";
+import router from "../../routes/routes.js";
+import "../setup.js";
+import User from "../../models/user.model.js";
+import ReadingQuestion from "../../models/reading.model.js";
+import WritingQuestion from "../../models/writing.model.js";
 
 const app = express();
 app.use(express.json());

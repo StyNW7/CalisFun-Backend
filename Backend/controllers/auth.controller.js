@@ -4,9 +4,16 @@ import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
   try {
-    const { username, email, phone_number, password, role } = req.body;
+    const { username, email, phone_number, password, role, passKey } = req.body;
 
-    if (!username || !email || !phone_number || !password || !role) {
+    if (
+      !username ||
+      !email ||
+      !phone_number ||
+      !password ||
+      !role ||
+      !passKey
+    ) {
       return res
         .status(400)
         .json({ message: "Please provide all required fields." });
@@ -25,6 +32,7 @@ export const registerUser = async (req, res) => {
       phone_number,
       password,
       role: "parent",
+      passKey,
     });
 
     await newUser.save();
@@ -36,6 +44,7 @@ export const registerUser = async (req, res) => {
         email: newUser.email,
         phone_number: newUser.phone_number,
         role: newUser.role,
+        passKey: newUser.passKey,
       },
     });
   } catch (error) {
@@ -61,7 +70,7 @@ export const loginUser = async (req, res) => {
         expiresIn: "24h",
       }
     );
-    res.json({ token });
+    res.json({ token, user: { passKey: user.passKey } });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error: error.message });
   }
